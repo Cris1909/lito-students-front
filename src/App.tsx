@@ -2,8 +2,8 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { ECommerce, SignIn, SignUp } from './pages';
-import {Loader} from './common';
+import { AuthLayout, ECommerce, SignIn, SignUp } from './pages';
+import { Loader } from './common';
 
 import routes from './routes';
 import { useToken } from './hooks';
@@ -30,9 +30,10 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Navigate to={ROUTES.SIGNIN} />} />
-        <Route path={useToken() ? '/' : ROUTES.SIGNIN} element={<SignIn />} />
-        <Route path={useToken() ? '/' : ROUTES.SIGNUP} element={<SignUp />} />
-
+        <Route element={<AuthLayout />}>
+          <Route path={ROUTES.SIGNIN} element={<SignIn />} />
+          <Route path={ROUTES.SIGNUP} element={<SignUp />} />
+        </Route>
         <Route element={<ProtectedRoutes />}>
           <Route element={<DefaultLayout />}>
             <Route index element={<ECommerce />} />

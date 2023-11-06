@@ -1,5 +1,6 @@
-export { default as SignIn } from './Authentication/SignIn';
-export { default as SignUp } from './Authentication/SignUp';
+export * from './Authentication/SignIn';
+export * from './Authentication/SignUp';
+export * from './Authentication';
 export { default as Calendar } from './Calendar';
 export { default as Chart } from './Chart';
 export { default as ECommerce } from './Dashboard/ECommerce';
