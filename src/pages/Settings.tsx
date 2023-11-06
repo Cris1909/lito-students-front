@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 
-import Breadcrumb from '../components/Breadcrumb';
+import Breadcrumb from '../common/components/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 import fireToast from '../hooks/fireToast';
 

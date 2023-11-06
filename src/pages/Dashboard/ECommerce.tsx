@@ -1,13 +1,13 @@
-import CardFour from '../../components/CardFour.tsx';
-import CardOne from '../../components/CardOne.tsx';
-import CardThree from '../../components/CardThree.tsx';
-import CardTwo from '../../components/CardTwo.tsx';
-import ChartOne from '../../components/ChartOne.tsx';
-import ChartThree from '../../components/ChartThree.tsx';
-import ChartTwo from '../../components/ChartTwo.tsx';
-import ChatCard from '../../components/ChatCard.tsx';
-import MapOne from '../../components/MapOne.tsx';
-import TableOne from '../../components/TableOne.tsx';
+import CardFour from '../../common/components/CardFour.tsx';
+import CardOne from '../../common/components/CardOne.tsx';
+import CardThree from '../../common/components/CardThree.tsx';
+import CardTwo from '../../common/components/CardTwo.tsx';
+import ChartOne from '../../common/components/ChartOne.tsx';
+import ChartThree from '../../common/components/ChartThree.tsx';
+import ChartTwo from '../../common/components/ChartTwo.tsx';
+import ChatCard from '../../common/components/ChatCard.tsx';
+import MapOne from '../../common/components/MapOne.tsx';
+import TableOne from '../../common/components/TableOne.tsx';
 
 const ECommerce = () => {
   return (
