@@ -17,7 +17,7 @@ import { startLogin } from '../../../store';
 import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
 import toast from 'react-hot-toast';
 
-const iconStyle = { width: 25, height: 25 };
+const iconStyle = { width: 22, height: 22 };
 interface IFormInput {
   email: string;
   password: string;
@@ -29,7 +29,7 @@ const emailValidations: RegisterOptions<FieldValues> = {
     message: 'El email es requerido',
   },
   pattern: {
-    value: PatterRegex.emailRegex,
+    value: PatterRegex.email,
     message: 'Email invalido',
   },
 };
@@ -40,7 +40,7 @@ const passwordValidations: RegisterOptions<FieldValues> = {
     message: 'La contraseña es requerida',
   },
   pattern: {
-    value: PatterRegex.passwordRegex,
+    value: PatterRegex.password,
     message: 'Debe tener al menos una letra, un número y un carácter especial',
   },
 };
@@ -57,7 +57,6 @@ export const SignIn = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
     setError,
   } = useForm<IFormInput>();
@@ -115,20 +114,18 @@ export const SignIn = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <CustomInput
-          control={control}
           register={register}
           name="email"
           label="Correo"
           icon={<MdOutlineMailOutline style={iconStyle} />}
           type="email"
           rules={emailValidations}
-          placeholder={'Correo'}
+          placeholder={'example@gmail.com'}
           autoComplete="email"
           error={errors.email}
         />
 
         <CustomInput
-          control={control}
           register={register}
           name="password"
           label="Contraseña"
@@ -139,7 +136,7 @@ export const SignIn = () => {
               className="cursor-pointer"
             />
           }
-          placeholder="Ingresa tu contraseña"
+          placeholder="**********"
           type={passwordInputType}
           autoComplete="current-password"
           rules={passwordValidations}

@@ -12,7 +12,6 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<any>;
   name: string;
   icon: ReactNode;
-  control: Control<any>;
   rules?: RegisterOptions<FieldValues>;
   error?: FieldError;
 }
@@ -22,7 +21,6 @@ export const CustomInput: React.FC<Props> = ({
   icon,
   register,
   name,
-  control,
   rules,
   error,
   ...rest
