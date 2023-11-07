@@ -7,7 +7,10 @@ interface Login {
 }
 
 interface Register {
-
+  email: string;
+  password: string;
+  phoneNumber: string;
+  name: string
 }
 
 interface TokenPayloadResponse {

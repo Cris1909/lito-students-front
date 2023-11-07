@@ -56,6 +56,11 @@ module.exports = {
       success: '#219653',
       danger: '#D34053',
       warning: '#FFA70B',
+      inactive: '#e1e1e1',
+      'inactive-1': '#a8a8a8',
+      darkinactive: '#3c3d3d',
+      'darkinactive-1': '##777777'
+
     },
     screens: {
       '2xsm': '375px',
