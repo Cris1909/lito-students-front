@@ -1,10 +1,15 @@
 import { useState } from 'react';
-import Header from '../common/components/Header';
-import Sidebar from '../common/components/Sidebar';
+import Header from './Header';
+import Sidebar from './Sidebar';
 import { Outlet } from 'react-router-dom';
 
 const DefaultLayout = () => {
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleLogout = () => {
+    
+  }
 
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">

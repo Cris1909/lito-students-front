@@ -1,3 +1,5 @@
+import { LocalStorageKeys } from "../enums";
+
 export const useToken = () => {
-  return localStorage.getItem("token");
+  return localStorage.getItem(LocalStorageKeys.TOKEN);
 };

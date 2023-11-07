@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FieldValues,
   RegisterOptions,
@@ -6,12 +7,15 @@ import {
   useForm,
 } from 'react-hook-form';
 import { MdOutlineMailOutline } from 'react-icons/md';
-
-import { ROUTES } from '../../../enums';
-import { CustomInput } from '../../../components';
-import { useState } from 'react';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+
+import { Errors, ROUTES } from '../../../enums';
+import { CustomInput } from '../../../components';
 import { PatterRegex } from '../../../constants';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { startLogin } from '../../../store';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import toast from 'react-hot-toast';
 
 const iconStyle = { width: 25, height: 25 };
 interface IFormInput {
@@ -44,23 +48,69 @@ const passwordValidations: RegisterOptions<FieldValues> = {
 export const SignIn = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const navigate = useNavigate()
+
+  const { error } = useAppSelector(selectAuthSlice);
+
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setError,
   } = useForm<IFormInput>();
 
   const PasswordIcon = showPassword ? BsEye : BsEyeSlash;
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const passwordInputType = showPassword ? 'text' : 'password';
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const handleInvalidCredentials = () => {
+    toast.error('Correo o contraseña incorrectos', {id: 'error'});
+    setError('email', { message: 'Revisa el correo, puede estar incorrecto' });
+    setError('password', {
+      message: 'Revisa la contraseña, puede ser incorrecta',
+    });
+  };
+  const handleEmailInvalid = () => {
+    toast.error('Correo invalido', {id: 'error'});
+    setError('email', {
+      message:
+        'Parece que el correo que ingresaste no es valido, intenta con otro',
+    });
+  };
+  const handlePasswordInvalid = () => {
+    toast.error('Contraseña invalida', {id: 'error'});
+    setError('password', {
+      message:
+        'Debe tener al menos una letra, un número y un carácter especial',
+    });
+  };
+
+  const handleErrors = (error: string) => {
+    if (error === Errors.INVALID_CREDENTIALS) return handleInvalidCredentials();
+    if (error === Errors.EMAIL_INVALID) return handleEmailInvalid();
+    if (error === Errors.PASSWORD_INVALID) return handlePasswordInvalid();
+    toast.error('Ha ocurrido un error', {id: 'error'});
+  };
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    toast.remove('error');
+    toast.loading('Cargando...', { id: 'loading' });
+    const { success, error } = await dispatch(startLogin(data));
+    toast.remove('loading');
+    if (success) {
+     toast.success('Sesión iniciada correctamente');
+     return navigate('/')
+    }
+    handleErrors(error);
+  };
 
   return (
-    <div className="h-screen">
-      <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-        Inicia sesión
+    <div className="">
+      <h2 className="mb-9 text-2xl font-bold text-primary-600 dark:text-white sm:text-title-xl2">
+        Inicia sesión con tu LitoCuenta
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
