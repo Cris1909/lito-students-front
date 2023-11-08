@@ -19,15 +19,13 @@ import toast from 'react-hot-toast';
 import { startRegister } from '../../../store';
 import { Errors } from '../../../enums';
 
-
-
 const iconStyle = { width: 22, height: 22 };
 
 enum FormKeys {
   EMAIL = 'email',
   PASSWORD = 'password',
   NAME = 'name',
-  PHONE_NUMBER = 'phoneNumber'
+  PHONE_NUMBER = 'phoneNumber',
 }
 
 interface IFormInput {
@@ -104,28 +102,69 @@ export const SignUp = () => {
   const passwordInputType = showPassword ? 'text' : 'password';
 
   const errorHandlers: any = {
-    [Errors.EMAIL_INVALID]: () => handleGenericError(FormKeys.EMAIL, 'Correo inválido', 'Parece que el correo que ingresaste no es válido, intenta con otro'),
-    [Errors.PASSWORD_INVALID]: () => handleGenericError(FormKeys.PASSWORD, 'Contraseña inválida', 'Debe tener al menos una letra, un número y un carácter especial'),
-    [Errors.NAME_MUST_BE_STRING]: () => handleGenericError(FormKeys.NAME, 'Nombre inválido', 'El nombre debe ser una cadena de caracteres'),
-    [Errors.PHONE_NUMBER_INVALID]: () => handleGenericError(FormKeys.PHONE_NUMBER, 'Número de teléfono inválido', 'El número de teléfono ingresado no es válido'),
-    [Errors.NAME_NOT_SEND]: () => handleGenericError(FormKeys.NAME, 'Nombre no proporcionado', 'Debes proporcionar un nombre'),
-    [Errors.NAME_TOO_SHORT]: () => handleGenericError(FormKeys.NAME, 'Nombre demasiado corto', 'El nombre debe tener al menos 3 caracteres'),
-    [Errors.EMAIL_ALREADY_EXIST]: () => handleGenericError(FormKeys.EMAIL, 'Este correo ya está registrado', 'El correo que ingresaste ya se encuentra registrado, intenta con otro'),
-    [Errors.PHONE_NUMBER_ALREADY_EXIST]: () => handleGenericError(FormKeys.PHONE_NUMBER, 'Este número de teléfono ya está registrado', 'El número de teléfono que ingresaste ya se encuentra registrado, intenta con otro'),
+    [Errors.EMAIL_INVALID]: () =>
+      handleGenericError(
+        FormKeys.EMAIL,
+        'Correo inválido',
+        'Parece que el correo que ingresaste no es válido, intenta con otro',
+      ),
+    [Errors.PASSWORD_INVALID]: () =>
+      handleGenericError(
+        FormKeys.PASSWORD,
+        'Contraseña inválida',
+        'Debe tener al menos una letra, un número y un carácter especial',
+      ),
+    [Errors.NAME_MUST_BE_STRING]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre inválido',
+        'El nombre debe ser una cadena de caracteres',
+      ),
+    [Errors.PHONE_NUMBER_INVALID]: () =>
+      handleGenericError(
+        FormKeys.PHONE_NUMBER,
+        'Número de teléfono inválido',
+        'El número de teléfono ingresado no es válido',
+      ),
+    [Errors.NAME_NOT_SEND]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre no proporcionado',
+        'Debes proporcionar un nombre',
+      ),
+    [Errors.NAME_TOO_SHORT]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre demasiado corto',
+        'El nombre debe tener al menos 3 caracteres',
+      ),
+    [Errors.EMAIL_ALREADY_EXIST]: () =>
+      handleGenericError(
+        FormKeys.EMAIL,
+        'Este correo ya está registrado',
+        'El correo que ingresaste ya se encuentra registrado, intenta con otro',
+      ),
+    [Errors.PHONE_NUMBER_ALREADY_EXIST]: () =>
+      handleGenericError(
+        FormKeys.PHONE_NUMBER,
+        'Este número de teléfono ya está registrado',
+        'El número de teléfono que ingresaste ya se encuentra registrado, intenta con otro',
+      ),
   };
 
-  const handleGenericError = (field: FormKeys, toastMessage: string, errorMessage: string) => {
+  const handleGenericError = (
+    field: FormKeys,
+    toastMessage: string,
+    errorMessage: string,
+  ) => {
     toast.error(toastMessage, { id: 'error' });
     setError(field, { message: errorMessage });
   };
-  
+
   const handleErrors = (error: any) => {
     const errorHandler = errorHandlers[error];
-    if (errorHandler) {
-      errorHandler();
-    } else {
-      toast.error('Ha ocurrido un error', { id: 'error' });
-    }
+    if (errorHandler) return errorHandler();
+    toast.error('Ha ocurrido un error', { id: 'error' });
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -134,8 +173,8 @@ export const SignUp = () => {
     const { success, error } = await dispatch(startRegister(data));
     toast.remove('loading');
     if (success) {
-     toast.success('Cuenta creada exitosamente');
-     return navigate('/')
+      toast.success('Cuenta creada exitosamente');
+      return navigate('/');
     }
     handleErrors(error);
   };

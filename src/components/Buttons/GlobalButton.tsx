@@ -1,22 +1,30 @@
-import React from 'react'
+import React from 'react';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  disabled?: boolean
-  backgroundColor?: string
-  textColor?: string
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  text: string;
+  disabled?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
-
-export const GlobalButton = ({disabled  = false, backgroundColor = 'primary', textColor = 'white', ...rest}: Props) => {
-
-
-  const style = disabled ? `` : `border-${backgroundColor} bg-${backgroundColor} text-${textColor}`
+export const GlobalButton = ({
+  text,
+  disabled = false,
+  backgroundColor = 'primary',
+  textColor = 'white',
+  type = 'button',
+  ...rest
+}: Props) => {
+  const style = disabled
+    ? `bg-inactive border-inactive text-inactive-1 dark:bg-darkinactive dark:text-darkinactive-1 dark:border-darkinactive cursor-default`
+    : `border-${backgroundColor} bg-${backgroundColor} text-${textColor}`;
   return (
-    <input
-      className="w-full cursor-pointer rounded-lg border p-4 transition hover:bg-opacity-90 border-"
+    <button
+      className={`w-full rounded-lg border p-4 transition hover:bg-opacity-90 ${style}`}
+      type={disabled ? 'button' : type}
       {...rest}
-    />
-  )
-}
-
-
+    >
+      {text}
+    </button>
+  );
+};

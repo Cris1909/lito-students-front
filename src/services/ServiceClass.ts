@@ -24,12 +24,12 @@ interface PutRequest {
 
 class ServiceClass {
   protected async getToken() {
-    return localStorage.getItem('x-token');
+    return localStorage.getItem('token');
   }
 
   protected async get<T>({ path, hasToken, params }: GetRequest) {
     const token = hasToken ? await this.getToken() : undefined;
-    const headers = { 'x-token': token };
+    const headers = { 'Authorization': `Bearer ${token}`};
     return axios
       .get<T>(`${URL}/${path}`, { headers, params })
       .then((response) => response.data)
@@ -40,7 +40,7 @@ class ServiceClass {
 
   protected async post<T>({ path, body = {}, hasToken, params }: PostRequest) {
     const token = hasToken ? await this.getToken() : undefined;
-    const headers = { 'x-token': token };
+    const headers = { 'Authorization': `Bearer ${token}` };
     return axios
       .post<T>(`${URL}/${path}`, body, { headers, params })
       .then((response) => response.data)
@@ -51,7 +51,7 @@ class ServiceClass {
 
   protected async put<T>({ path, body = {}, hasToken, params }: PutRequest) {
     const token = hasToken ? await this.getToken() : undefined;
-    const headers = { 'x-token': token };
+    const headers = { 'Authorization': `Bearer ${token}` };
     return axios
       .put<T>(`${URL}/${path}`, body, { headers, params })
       .then((response) => response.data)

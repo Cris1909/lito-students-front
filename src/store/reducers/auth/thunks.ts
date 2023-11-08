@@ -1,7 +1,7 @@
 import { LocalStorageKeys } from '../../../enums';
 import { AuthService } from '../../../services';
 import { AppDispatch, RootState } from '../../store';
-import { login, logout, setError, setLoading, } from './authSlice';
+import { login, logout, setError, setLoading } from './authSlice';
 
 export const thunkExample = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {};
@@ -21,7 +21,7 @@ interface RegisterProps {
 
 export const startLogin = (user: LoginProps) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     try {
       const { payload, token } = await AuthService.login(user);
       dispatch(
@@ -40,10 +40,9 @@ export const startLogin = (user: LoginProps) => {
   };
 };
 
-
 export const startRegister = (user: RegisterProps) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     try {
       const { payload, token } = await AuthService.register(user);
       dispatch(
@@ -62,10 +61,32 @@ export const startRegister = (user: RegisterProps) => {
   };
 };
 
+export const startValidateToken = () => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const savedToken = localStorage.getItem(LocalStorageKeys.TOKEN);
+    if (!savedToken) return false;
+    try {
+      const { token, payload } = await AuthService.validateToken();
+      dispatch(
+        login({
+          token,
+          user: payload,
+        }),
+      );
+      localStorage.setItem(LocalStorageKeys.USER, JSON.stringify(payload));
+      localStorage.setItem(LocalStorageKeys.TOKEN, token);
+      return true;
+    } catch (e) {
+      dispatch(startLogout())
+      return false;
+    }
+  };
+};
+
 export const startLogout = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    localStorage.removeItem(LocalStorageKeys.TOKEN)
-    localStorage.removeItem(LocalStorageKeys.USER)
+    localStorage.removeItem(LocalStorageKeys.TOKEN);
+    localStorage.removeItem(LocalStorageKeys.USER);
     dispatch(logout());
   };
 };

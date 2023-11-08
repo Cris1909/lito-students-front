@@ -34,6 +34,13 @@ class AuthService extends ServiceClass {
       body,
     });
   }
+
+  async validateToken() {
+    return super.get<TokenPayloadResponse>({
+      path: `${this.path}/validate-token`,
+      hasToken: true
+    })
+  }
   
 }
 

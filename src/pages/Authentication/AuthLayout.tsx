@@ -9,7 +9,7 @@ export const AuthLayout: React.FC = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex flex-wrap">
-        <div className="hidden w-full xl:block xl:w-1/2 h-screen">
+        <div className="hidden w-full lg:block lg:w-1/2 h-screen">
           <div className="py-17.5 px-26 text-center">
             <Link className="inline-block" to="/">
               <img className="hidden dark:block" src={LogoText} alt="Logo" />
@@ -23,7 +23,7 @@ export const AuthLayout: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
+        <div className="w-full border-stroke dark:border-strokedark lg:w-1/2 lg:border-l-2">
           <div className="w-full p-4 sm:p-12.5 xl:p-17.5">{<Outlet />}</div>
         </div>
       </div>
