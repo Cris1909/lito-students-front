@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   FieldValues,
   RegisterOptions,
@@ -6,18 +7,17 @@ import {
   useForm,
 } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { MdOutlineMailOutline } from 'react-icons/md';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import { AiOutlinePhone, AiOutlineUser } from 'react-icons/ai';
 
 import { PatterRegex } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
-import { useState } from 'react';
-import { CustomInput } from '../../../components';
-import { MdOutlineMailOutline } from 'react-icons/md';
-import { BsEye, BsEyeSlash } from 'react-icons/bs';
-import { AiOutlinePhone, AiOutlineUser } from 'react-icons/ai';
-import toast from 'react-hot-toast';
+import { CustomInput, GlobalButton } from '../../../components';
 import { startRegister } from '../../../store';
-import { Errors } from '../../../enums';
+import { Errors, ROUTES } from '../../../enums';
 
 const iconStyle = { width: 22, height: 22 };
 
@@ -174,7 +174,7 @@ export const SignUp = () => {
     toast.remove('loading');
     if (success) {
       toast.success('Cuenta creada exitosamente');
-      return navigate('/');
+      return navigate(ROUTES.DASHBOARD);
     }
     handleErrors(error);
   };
@@ -241,10 +241,11 @@ export const SignUp = () => {
         />
 
         <div className="mb-5">
-          <input
+      
+          <GlobalButton
+            disabled={loading}
             type="submit"
-            value="Crear cuenta"
-            className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+            text="Crear cuenta"
           />
         </div>
         <div className="mt-6 text-center">

@@ -11,12 +11,11 @@ import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 
 import { Errors, ROUTES } from '../../../enums';
-import { CustomInput } from '../../../components';
+import { CustomInput, GlobalButton } from '../../../components';
 import { PatterRegex } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { startLogin } from '../../../store';
 import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
-import { GlobalButton } from '../../../components/Buttons/GlobalButton';
 
 const iconStyle = { width: 22, height: 22 };
 
@@ -95,7 +94,7 @@ export const SignIn = () => {
     toast.remove('loading');
     if (success) {
      toast.success('Sesión iniciada correctamente');
-     return navigate('/')
+     return navigate(ROUTES.DASHBOARD)
     }
     handleErrors(error);
   };
