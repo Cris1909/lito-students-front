@@ -17,6 +17,7 @@ export const startLogin = ({ email, password }: LoginProps) => {
     dispatch(setLoading(true))
     try {
       const { payload, token } = await AuthService.login({ email, password });
+      console.log(payload)
       dispatch(
         login({
           token,

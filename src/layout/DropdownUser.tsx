@@ -2,14 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import UserOne from '../images/user/user-01.png';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { startLogout } from '../store';
 import { ROUTES } from '../enums';
+import { selectAuthSlice } from '../store/reducers/auth/authSlice';
+
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const dispatch = useAppDispatch();
+
+  const {user} = useAppSelector(selectAuthSlice)
+  const {name, roles} = user;
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -55,9 +60,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{roles}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
