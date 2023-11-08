@@ -1,20 +1,30 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import ECommerce from './pages/Dashboard/ECommerce';
-import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
-import Loader from './common/Loader';
+import { AuthLayout, ECommerce, SignIn, SignUp } from './pages';
+import { Loader } from './common';
+
 import routes from './routes';
+import { useAppDispatch, useToken } from './hooks';
+import { ROUTES } from './enums';
+import { ProtectedRoutes } from './guards';
+import { startValidateToken } from './store';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
 
+  const dispatch = useAppDispatch();
+
+  const handleValidateToken = async () => {
+    await dispatch(startValidateToken());
+    setLoading(false);
+  };
+
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    handleValidateToken();
   }, []);
 
   return loading ? (
@@ -27,24 +37,30 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-        <Route path="/auth/signin" element={<SignIn />} />
-        <Route path="/auth/signup" element={<SignUp />} />
-        <Route element={<DefaultLayout />}>
-          <Route index element={<ECommerce />} />
-          {routes.map((routes, index) => {
-            const { path, component: Component } = routes;
-            return (
-              <Route
-                key={index}
-                path={path}
-                element={
-                  <Suspense fallback={<Loader />}>
-                    <Component />
-                  </Suspense>
-                }
-              />
-            );
-          })}
+        <Route path="/" element={<Navigate to={ROUTES.SIGNIN} />} />
+        <Route element={<AuthLayout />}>
+          <Route path={useToken() ? '/' : ROUTES.SIGNIN} element={<SignIn />} />
+          <Route path={useToken() ? '/' : ROUTES.SIGNUP} element={<SignUp />} />
+        </Route>
+        <Route element={<ProtectedRoutes />}>
+          <Route element={<DefaultLayout />}>
+            <Route index element={<ECommerce />} />
+            <Route path="*" element={<Navigate to={'/'} />} />
+            {routes.map((routes, index) => {
+              const { path, component: Component } = routes;
+              return (
+                <Route
+                  key={index}
+                  path={path}
+                  element={
+                    <Suspense fallback={<Loader />}>
+                      <Component />
+                    </Suspense>
+                  }
+                />
+              );
+            })}
+          </Route>
         </Route>
       </Routes>
     </>

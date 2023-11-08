@@ -1,4 +1,4 @@
-import Breadcrumb from '../../components/Breadcrumb';
+import Breadcrumb from '../../common/components/Breadcrumb';
 
 const Alerts = () => {
   return (
