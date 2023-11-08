@@ -8,6 +8,7 @@ import {
 } from 'react-hook-form';
 import { MdOutlineMailOutline } from 'react-icons/md';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import toast from 'react-hot-toast';
 
 import { Errors, ROUTES } from '../../../enums';
 import { CustomInput } from '../../../components';
@@ -15,9 +16,14 @@ import { PatterRegex } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { startLogin } from '../../../store';
 import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
-import toast from 'react-hot-toast';
+import { GlobalButton } from '../../../components/Buttons/GlobalButton';
 
 const iconStyle = { width: 22, height: 22 };
+
+enum FormKeys {
+  EMAIL = 'email',
+  PASSWORD = 'password',
+}
 interface IFormInput {
   email: string;
   password: string;
@@ -50,7 +56,7 @@ export const SignIn = () => {
 
   const navigate = useNavigate()
 
-  const { error } = useAppSelector(selectAuthSlice);
+  const { loading } = useAppSelector(selectAuthSlice);
 
   const dispatch = useAppDispatch();
 
@@ -65,33 +71,21 @@ export const SignIn = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const passwordInputType = showPassword ? 'text' : 'password';
 
-  const handleInvalidCredentials = () => {
-    toast.error('Correo o contraseña incorrectos', {id: 'error'});
-    setError('email', { message: 'Revisa el correo, puede estar incorrecto' });
-    setError('password', {
-      message: 'Revisa la contraseña, puede ser incorrecta',
-    });
-  };
-  const handleEmailInvalid = () => {
-    toast.error('Correo invalido', {id: 'error'});
-    setError('email', {
-      message:
-        'Parece que el correo que ingresaste no es valido, intenta con otro',
-    });
-  };
-  const handlePasswordInvalid = () => {
-    toast.error('Contraseña invalida', {id: 'error'});
-    setError('password', {
-      message:
-        'Debe tener al menos una letra, un número y un carácter especial',
-    });
+  const errorHandlers: any = {
+    [Errors.EMAIL_INVALID]: () => handleGenericError(FormKeys.EMAIL, 'Correo inválido', 'Parece que el correo que ingresaste no es válido, intenta con otro'),
+    [Errors.PASSWORD_INVALID]: () => handleGenericError(FormKeys.PASSWORD, 'Contraseña inválida', 'Debe tener al menos una letra, un número y un carácter especial'),
+    [Errors.EMAIL_ALREADY_EXIST]: () => handleGenericError(FormKeys.EMAIL, 'Este correo ya está registrado', 'El correo que ingresaste ya se encuentra registrado, intenta con otro'),
   };
 
-  const handleErrors = (error: string) => {
-    if (error === Errors.INVALID_CREDENTIALS) return handleInvalidCredentials();
-    if (error === Errors.EMAIL_INVALID) return handleEmailInvalid();
-    if (error === Errors.PASSWORD_INVALID) return handlePasswordInvalid();
-    toast.error('Ha ocurrido un error', {id: 'error'});
+  const handleGenericError = (field: FormKeys, toastMessage: string, errorMessage: string) => {
+    toast.error(toastMessage, { id: 'error' });
+    setError(field, { message: errorMessage });
+  };
+  
+  const handleErrors = (error: any) => {
+    const errorHandler = errorHandlers[error];
+    if (errorHandler) return errorHandler();
+    toast.error('Ha ocurrido un error', { id: 'error' });
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -144,10 +138,10 @@ export const SignIn = () => {
         />
 
         <div className="mb-5">
-          <input
+          <GlobalButton
+            disabled={loading}
             type="submit"
-            value="Iniciar sesión"
-            className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+            text="Iniciar sesión"
           />
         </div>
 

@@ -2,6 +2,7 @@ import {
   FieldValues,
   RegisterOptions,
   SubmitHandler,
+  UseFormSetError,
   useForm,
 } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,13 +15,24 @@ import { CustomInput } from '../../../components';
 import { MdOutlineMailOutline } from 'react-icons/md';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { AiOutlinePhone, AiOutlineUser } from 'react-icons/ai';
+import toast from 'react-hot-toast';
+import { startRegister } from '../../../store';
+import { Errors } from '../../../enums';
 
 const iconStyle = { width: 22, height: 22 };
+
+enum FormKeys {
+  EMAIL = 'email',
+  PASSWORD = 'password',
+  NAME = 'name',
+  PHONE_NUMBER = 'phoneNumber',
+}
+
 interface IFormInput {
-  email: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
+  [FormKeys.EMAIL]: string;
+  [FormKeys.PASSWORD]: string;
+  [FormKeys.NAME]: string;
+  [FormKeys.PHONE_NUMBER]: string;
 }
 
 const emailValidations: RegisterOptions<FieldValues> = {
@@ -71,12 +83,10 @@ const phoneNumberValidations: RegisterOptions<FieldValues> = {
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { error } = useAppSelector(selectAuthSlice);
+  const { loading } = useAppSelector(selectAuthSlice);
 
   const dispatch = useAppDispatch();
 
@@ -91,17 +101,82 @@ export const SignUp = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const passwordInputType = showPassword ? 'text' : 'password';
 
+  const errorHandlers: any = {
+    [Errors.EMAIL_INVALID]: () =>
+      handleGenericError(
+        FormKeys.EMAIL,
+        'Correo inválido',
+        'Parece que el correo que ingresaste no es válido, intenta con otro',
+      ),
+    [Errors.PASSWORD_INVALID]: () =>
+      handleGenericError(
+        FormKeys.PASSWORD,
+        'Contraseña inválida',
+        'Debe tener al menos una letra, un número y un carácter especial',
+      ),
+    [Errors.NAME_MUST_BE_STRING]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre inválido',
+        'El nombre debe ser una cadena de caracteres',
+      ),
+    [Errors.PHONE_NUMBER_INVALID]: () =>
+      handleGenericError(
+        FormKeys.PHONE_NUMBER,
+        'Número de teléfono inválido',
+        'El número de teléfono ingresado no es válido',
+      ),
+    [Errors.NAME_NOT_SEND]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre no proporcionado',
+        'Debes proporcionar un nombre',
+      ),
+    [Errors.NAME_TOO_SHORT]: () =>
+      handleGenericError(
+        FormKeys.NAME,
+        'Nombre demasiado corto',
+        'El nombre debe tener al menos 3 caracteres',
+      ),
+    [Errors.EMAIL_ALREADY_EXIST]: () =>
+      handleGenericError(
+        FormKeys.EMAIL,
+        'Este correo ya está registrado',
+        'El correo que ingresaste ya se encuentra registrado, intenta con otro',
+      ),
+    [Errors.PHONE_NUMBER_ALREADY_EXIST]: () =>
+      handleGenericError(
+        FormKeys.PHONE_NUMBER,
+        'Este número de teléfono ya está registrado',
+        'El número de teléfono que ingresaste ya se encuentra registrado, intenta con otro',
+      ),
+  };
+
+  const handleGenericError = (
+    field: FormKeys,
+    toastMessage: string,
+    errorMessage: string,
+  ) => {
+    toast.error(toastMessage, { id: 'error' });
+    setError(field, { message: errorMessage });
+  };
+
+  const handleErrors = (error: any) => {
+    const errorHandler = errorHandlers[error];
+    if (errorHandler) return errorHandler();
+    toast.error('Ha ocurrido un error', { id: 'error' });
+  };
+
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data);
-    // toast.remove('error');
-    // toast.loading('Cargando...', { id: 'loading' });
-    // const { success, error } = await dispatch(startLogin(data));
-    // toast.remove('loading');
-    // if (success) {
-    //  toast.success('Sesión iniciada correctamente');
-    //  return navigate('/')
-    // }
-    // handleErrors(error);
+    toast.remove('error');
+    toast.loading('Cargando...', { id: 'loading' });
+    const { success, error } = await dispatch(startRegister(data));
+    toast.remove('loading');
+    if (success) {
+      toast.success('Cuenta creada exitosamente');
+      return navigate('/');
+    }
+    handleErrors(error);
   };
 
   return (
@@ -160,7 +235,7 @@ export const SignUp = () => {
           }
           placeholder="**********"
           type={passwordInputType}
-          autoComplete="current-password"
+          autoComplete="off"
           rules={passwordValidations}
           error={errors.password}
         />

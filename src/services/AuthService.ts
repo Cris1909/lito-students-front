@@ -7,7 +7,10 @@ interface Login {
 }
 
 interface Register {
-
+  email: string;
+  password: string;
+  phoneNumber: string;
+  name: string
 }
 
 interface TokenPayloadResponse {
@@ -30,6 +33,13 @@ class AuthService extends ServiceClass {
       path: `${this.path}/register`,
       body,
     });
+  }
+
+  async validateToken() {
+    return super.get<TokenPayloadResponse>({
+      path: `${this.path}/validate-token`,
+      hasToken: true
+    })
   }
   
 }
