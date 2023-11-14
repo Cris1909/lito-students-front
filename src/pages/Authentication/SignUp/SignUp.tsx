@@ -181,7 +181,7 @@ export const SignUp = () => {
 
   return (
     <>
-      <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+      <h2 className="mb-9 text-2xl font-bold text-primary-600 dark:text-white sm:text-title-xl2">
         Regístrate
       </h2>
 
@@ -241,12 +241,7 @@ export const SignUp = () => {
         />
 
         <div className="mb-5">
-      
-          <GlobalButton
-            disabled={loading}
-            type="submit"
-            text="Crear cuenta"
-          />
+          <GlobalButton disabled={loading} type="submit" text="Crear cuenta" />
         </div>
         <div className="mt-6 text-center">
           <p>
