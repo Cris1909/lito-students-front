@@ -58,8 +58,8 @@ module.exports = {
       warning: '#FFA70B',
       inactive: '#e1e1e1',
       'inactive-1': '#a8a8a8',
-      darkinactive: '#3c3d3d',
-      'darkinactive-1': '##777777'
+      darkinactive: '#374151',
+      'darkinactive-1': '#6a7380'
 
     },
     screens: {
