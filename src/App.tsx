@@ -2,6 +2,9 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import 'animate.css';
+
 import { AuthLayout, SignIn, SignUp } from './pages';
 import { Loader } from './common';
 

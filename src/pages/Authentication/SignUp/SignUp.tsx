@@ -3,7 +3,6 @@ import {
   FieldValues,
   RegisterOptions,
   SubmitHandler,
-  UseFormSetError,
   useForm,
 } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -188,43 +187,43 @@ export const SignUp = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CustomInput
           register={register}
-          name="name"
+          name={FormKeys.NAME}
           label="Nombre completo"
           icon={<AiOutlineUser style={iconStyle} />}
           type="text"
           rules={nameValidations}
           placeholder={'Alejandra Martinez'}
           autoComplete="name"
-          error={errors.name}
+          error={errors[FormKeys.NAME]}
         />
 
         <CustomInput
           register={register}
-          name="email"
+          name={FormKeys.NAME}
           label="Correo"
           icon={<MdOutlineMailOutline style={iconStyle} />}
           type="email"
           rules={emailValidations}
           placeholder={'example@gmail.com'}
           autoComplete="email"
-          error={errors.email}
+          error={errors[FormKeys.EMAIL]}
         />
 
         <CustomInput
           register={register}
-          name="phoneNumber"
+          name={FormKeys.PHONE_NUMBER}
           label="Número de teléfono"
           icon={<AiOutlinePhone style={iconStyle} />}
           type="tel"
           rules={phoneNumberValidations}
           placeholder={'3123456789'}
           autoComplete="tel"
-          error={errors.phoneNumber}
+          error={errors[FormKeys.PHONE_NUMBER]}
         />
 
         <CustomInput
           register={register}
-          name="password"
+          name={FormKeys.PASSWORD}
           label="Contraseña"
           icon={
             <PasswordIcon
@@ -237,7 +236,7 @@ export const SignUp = () => {
           type={passwordInputType}
           autoComplete="off"
           rules={passwordValidations}
-          error={errors.password}
+          error={errors[FormKeys.PASSWORD]}
         />
 
         <div className="mb-5">
@@ -246,7 +245,7 @@ export const SignUp = () => {
         <div className="mt-6 text-center">
           <p>
             ¿Ya tienes una cuenta?{' '}
-            <Link to="/auth/signin" className="text-primary">
+            <Link to={ROUTES.SIGNIN} className="text-primary">
               Inicia sesión
             </Link>
           </p>

@@ -24,8 +24,8 @@ enum FormKeys {
   PASSWORD = 'password',
 }
 interface IFormInput {
-  email: string;
-  password: string;
+  [FormKeys.EMAIL]: string;
+  [FormKeys.PASSWORD]: string;
 }
 
 const emailValidations: RegisterOptions<FieldValues> = {
@@ -108,19 +108,19 @@ export const SignIn = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CustomInput
           register={register}
-          name="email"
+          name={FormKeys.EMAIL}
           label="Correo"
           icon={<MdOutlineMailOutline style={iconStyle} />}
           type="email"
           rules={emailValidations}
           placeholder={'example@gmail.com'}
           autoComplete="email"
-          error={errors.email}
+          error={errors[FormKeys.EMAIL]}
         />
 
         <CustomInput
           register={register}
-          name="password"
+          name={FormKeys.PASSWORD}
           label="Contraseña"
           icon={
             <PasswordIcon
@@ -133,7 +133,7 @@ export const SignIn = () => {
           type={passwordInputType}
           autoComplete="current-password"
           rules={passwordValidations}
-          error={errors.password}
+          error={errors[FormKeys.PASSWORD]}
         />
 
         <div className="mb-5">
