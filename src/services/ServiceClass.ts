@@ -15,7 +15,7 @@ interface PostRequest {
   hasToken?: boolean;
 }
 
-interface PutRequest {
+interface PatchRequest {
   path: string;
   body?: any;
   params?: any;
@@ -49,11 +49,11 @@ class ServiceClass {
       });
   }
 
-  protected async put<T>({ path, body = {}, hasToken, params }: PutRequest) {
+  protected async patch<T>({ path, body = {}, hasToken, params }: PatchRequest) {
     const token = hasToken ? await this.getToken() : undefined;
     const headers = { 'Authorization': `Bearer ${token}` };
     return axios
-      .put<T>(`${URL}/${path}`, body, { headers, params })
+      .patch<T>(`${URL}/${path}`, body, { headers, params })
       .then((response) => response.data)
       .catch((error) => {
         throw { ...error?.response?.data, status: error?.response?.status };
