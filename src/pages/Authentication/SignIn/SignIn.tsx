@@ -71,6 +71,7 @@ export const SignIn = () => {
   const passwordInputType = showPassword ? 'text' : 'password';
 
   const errorHandlers: any = {
+    [Errors.INVALID_CREDENTIALS]: () => toast.error('Correo o contraseña incorrectos', { id: 'error' }),
     [Errors.EMAIL_INVALID]: () => handleGenericError(FormKeys.EMAIL, 'Correo inválido', 'Parece que el correo que ingresaste no es válido, intenta con otro'),
     [Errors.PASSWORD_INVALID]: () => handleGenericError(FormKeys.PASSWORD, 'Contraseña inválida', 'Debe tener al menos una letra, un número y un carácter especial'),
     [Errors.EMAIL_ALREADY_EXIST]: () => handleGenericError(FormKeys.EMAIL, 'Este correo ya está registrado', 'El correo que ingresaste ya se encuentra registrado, intenta con otro'),

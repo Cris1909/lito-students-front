@@ -199,7 +199,7 @@ export const SignUp = () => {
 
         <CustomInput
           register={register}
-          name={FormKeys.NAME}
+          name={FormKeys.EMAIL}
           label="Correo"
           icon={<MdOutlineMailOutline style={iconStyle} />}
           type="email"
