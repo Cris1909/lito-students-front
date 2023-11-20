@@ -2,8 +2,8 @@ import { IAvailableSchedule } from '../interfaces';
 import ServiceClass from './ServiceClass';
 
 interface ICreateAvailableSchedule {
-date: string;
-hours: number[]
+  date: string;
+  hours: number[];
 }
 
 class AvailableSchedulesService extends ServiceClass {
@@ -17,8 +17,13 @@ class AvailableSchedulesService extends ServiceClass {
     });
   }
 
- 
-  
+  async listByWeek(date: Date | string) {
+    const params = { date };
+    return super.get<IAvailableSchedule[]>({
+      path: `${this.path}/list-by-week`,
+      params,
+    });
+  }
 }
 
 export default new AvailableSchedulesService();

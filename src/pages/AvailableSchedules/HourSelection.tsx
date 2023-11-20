@@ -75,7 +75,7 @@ export const HourSelection: React.FC<Props> = ({
             onMouseDown={() => handleMouseDown(hour)}
             onMouseEnter={() => handleMouseEnter(hour)}
             disabled={
-              targetDate && !isSameDayAsTarget() ? false : hour < currentHour
+              targetDate && !isSameDayAsTarget() ? false : hour <= currentHour
             }
             className={`py-1 w-20 rounded border-2 border-black border-opacity-20 dark:border-primary-400 ${
               selectedHours.includes(hour)

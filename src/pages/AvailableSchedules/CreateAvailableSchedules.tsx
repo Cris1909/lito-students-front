@@ -45,7 +45,7 @@ const CreateAvailableSchedules = () => {
 
   const createAvailableSchedule = async () => {
 
-    if(!selectedHours) return toast.error('Debes seleccionar una fecha para crear un horario disponible', {id: 'error'})
+    if(!selectedDate) return toast.error('Debes seleccionar una fecha para crear un horario disponible', {id: 'error'})
     if(!selectedHours.length) return toast.error('Debes seleccionar por lo menos una hora', {id: 'error'})
 
     const body = {
