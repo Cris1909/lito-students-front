@@ -1,12 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import Logo from '../assets/images/logo-text.png';
-import SidebarLinkGroup from '../common/components/SidebarLinkGroup';
-import { MdKeyboardArrowDown, MdKeyboardControlKey } from 'react-icons/md';
-import { AiOutlineAppstore, AiOutlineBook } from 'react-icons/ai';
-import { ROUTES } from '../enums';
 
+import { AiOutlineAppstore, AiOutlineBook,AiOutlineCalendar } from 'react-icons/ai';
+
+import { ISection } from '../interfaces';
+import { ROUTES, Sections } from '../enums';
+import { SidebarItem } from './SidebarItem';
+
+
+const SIDEBAR_SECTIONS: ISection[] = [{
+  path: Sections.SUBJECTS,
+  name: 'Materias',
+  Icon: <AiOutlineBook className="mr-1.5" />,
+  children: [
+    {
+      path: ROUTES.CREATE_SUBJECT,
+      name: 'Crear materia',
+    },
+    {
+      path: ROUTES.LIST_SUBJECTS,
+      name: 'Listar materias'
+    }
+  ],
+},
+{
+  path: Sections.AVAILABLE_SCHEDULES,
+  name: 'Horarios Disponibles',
+  Icon: <AiOutlineCalendar className="mr-1.5" />,
+  children: [
+    {
+      path: ROUTES.CREATE_AVAILABLE_SCHEDULES,
+      name: 'Crear horario disponible',
+    },
+  ],
+}
+]
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
@@ -20,7 +50,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const sidebar = useRef<any>(null);
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-  const [sidebarExpanded, setSidebarExpanded] = useState(
+  const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
@@ -58,6 +88,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       document.querySelector('body')?.classList.remove('sidebar-expanded');
     }
   }, [sidebarExpanded]);
+
+  const renderItem = (section: ISection) => <SidebarItem key={section.path} sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded} section={section} />
 
   return (
     <aside
@@ -118,9 +150,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
               {/* <!-- Menu Item DashBoard --> */}
+                  {SIDEBAR_SECTIONS.map(renderItem)}
 
               {/* <!-- Menu Item Materias --> */}
-              <SidebarLinkGroup
+              {/* <SidebarLinkGroup
                 activeCondition={
                   pathname === '/subjects' || pathname.includes('subjects')
                 }
@@ -156,7 +189,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           )}
                         </span>
                       </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
+                     
                       <div
                         className={`translate transform overflow-hidden ${
                           !open && 'hidden'
@@ -187,11 +220,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                         </ul>
                       </div>
-                      {/* <!-- Dropdown Menu End --> */}
+                      <!-- Dropdown Menu End -->
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup> */}
               {/* <!-- Menu Item Materias --> */}
             </ul>
           </div>

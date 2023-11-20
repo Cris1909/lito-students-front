@@ -1,10 +1,12 @@
 import React from 'react';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string;
+  text?: string;
   disabled?: boolean;
   backgroundColor?: string;
   textColor?: string;
+  icon?: any;
+  classStyle?: string;
 }
 
 export const GlobalButton = ({
@@ -13,6 +15,8 @@ export const GlobalButton = ({
   backgroundColor = 'primary',
   textColor = 'white',
   type = 'button',
+  classStyle,
+  icon,
   ...rest
 }: Props) => {
   const style = disabled
@@ -20,11 +24,13 @@ export const GlobalButton = ({
     : `border-${backgroundColor} bg-${backgroundColor} text-${textColor}`;
   return (
     <button
-      className={`w-full rounded-lg border p-4 transition hover:bg-opacity-90 ${style}`}
+      disabled={disabled}
+      className={`w-full justify-center rounded-lg border p-4 transition hover:bg-opacity-90 flex gap-2 items-center ${style} ${classStyle}`}
       type={disabled ? 'button' : type}
       {...rest}
     >
       {text}
+      {icon}
     </button>
   );
 };

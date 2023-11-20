@@ -1,6 +1,7 @@
 export * from './Authentication/SignIn';
 export * from './Authentication/SignUp';
 export * from './Authentication';
+export * from './AvailableSchedules';
 export { default as Calendar } from './Calendar';
 export { default as Chart } from './Chart';
 export * from './Dashboard';
