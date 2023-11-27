@@ -18,7 +18,8 @@ import { PatterRegex } from '../../constants';
 import { Errors } from '../../enums';
 import { ISubject } from '../../interfaces';
 
-import DEFAULT_IMAGE from '../../assets/images/default-image.jpeg';
+import DEFAULT_IMAGE from '../../assets/images/default-image.png';
+import dayjs from 'dayjs';
 
 enum FormKeys {
   NAME = 'name',
@@ -71,7 +72,6 @@ const CreateSubject = () => {
 
   const validateImage = async () => {
     const isValidImage = await isImageUrl(watchImage);
-    console.log({isImageUrl})
     const displayImage = isValidImage ? watchImage : DEFAULT_IMAGE;
     setDisplayImage(displayImage);
     setIsValidImage(isValidImage);

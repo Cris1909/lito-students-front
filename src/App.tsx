@@ -2,23 +2,25 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import "primereact/resources/themes/lara-light-indigo/theme.css";
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'animate.css';
 
 import { AuthLayout, SignIn, SignUp } from './pages';
 import { Loader } from './common';
 
 import routes from './routes';
-import { useAppDispatch, useToken } from './hooks';
+import { useAppDispatch, useAppSelector, useToken } from './hooks';
 import { ROUTES } from './enums';
 import { ProtectedRoutes } from './guards';
 import { startValidateToken } from './store';
-import { Dashboard } from './pages/Dashboard';
-
-const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
+import { Dashboard } from './pages';
+import { selectAuthSlice } from './store/reducers/auth/authSlice';
+import { DefaultLayout } from './layout';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { user } = useAppSelector(selectAuthSlice);
 
   const dispatch = useAppDispatch();
 
@@ -30,6 +32,13 @@ function App() {
   useEffect(() => {
     handleValidateToken();
   }, []);
+
+  // Validar si puede estar en la ruta según su rol
+  const parseRoutes = routes.filter((route) =>
+    route.roles.some((condition) => {
+      return user.roles.includes(condition);
+    }),
+  );
 
   return loading ? (
     <Loader />
@@ -50,7 +59,7 @@ function App() {
           <Route element={<DefaultLayout />}>
             <Route index path={ROUTES.DASHBOARD} element={<Dashboard />} />
             <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} />} />
-            {routes.map((routes, index) => {
+            {parseRoutes.map((routes, index) => {
               const { path, component: Component } = routes;
               return (
                 <Route

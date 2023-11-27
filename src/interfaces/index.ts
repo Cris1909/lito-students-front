@@ -1,3 +1,4 @@
+export * from './IAppointment';
 export * from './IAvailableSchedule';
 export * from './IPagination';
 export * from './ISection';

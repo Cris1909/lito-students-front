@@ -96,7 +96,7 @@ const CreateAvailableSchedules = () => {
               setSelectedHours={setSelectedHours}
               targetDate={selectedDate}
             />
-            <hr className="w-90 m-auto my-3 " />
+            <hr className="w-90 m-auto my-3 text-black dark:text-bodydark1 opacity-50" />
             <div className="flex justify-center gap-6">
               <GlobalButton
                 text="Limpiar horas"

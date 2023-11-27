@@ -1,3 +1,5 @@
+import { ProgressSpinner } from "primereact/progressspinner";
+
 interface Props {
   size?: number;
   withoutContainer?: boolean;

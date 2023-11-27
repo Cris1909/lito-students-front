@@ -1,71 +1,144 @@
-import { RefObject, useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Scheduler } from '@aldabil/react-scheduler';
-import dayjs from 'dayjs';
+import { SchedulerHelpers, SchedulerRef } from '@aldabil/react-scheduler/types';
 import toast from 'react-hot-toast';
-import { AvailableSchedulesService } from '../../services';
-import { IAvailableSchedule } from '../../interfaces';
+
+import 'react-responsive-modal/styles.css';
+
+import {
+  AppointmentService,
+  AvailableSchedulesService,
+  SubjectsService,
+} from '../../services';
+
 import { formatDateInLocalTimezone } from '../../helpers';
-import { SchedulerRef } from '@aldabil/react-scheduler/types';
+import { IAppointment, IAvailableSchedule, ISubject } from '../../interfaces';
+import { Colors } from '../../enums';
+import { SchedulingComponent } from './SchedulingComponent';
+import { Loader } from '../../common';
 
 const Dashboard = () => {
   const [selectedDay, setSelectedDay] = useState(formatDateInLocalTimezone());
-  
+
   const [availableSchedules, setAvailableSchedules] = useState<
     IAvailableSchedule[]
   >([]);
 
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState<any>([]);
 
+  const [subjects, setSubjects] = useState<ISubject[]>([]);
+
+  const getSubjects = async () => {
+    try {
+      const response = await SubjectsService.listActive();
+      setSubjects(response);
+    } catch (error: any) {}
+  };
 
   const calendarRef = useRef<SchedulerRef>(null);
 
   const getSchedules = async () => {
     setLoading(true);
     try {
-      const response = await AvailableSchedulesService.listByWeek(selectedDay);
-      setAvailableSchedules(response);
-      const newData: any = response.flatMap((item: IAvailableSchedule, i: number) => 
-        item.hours.map((hour: number, j: number) => ({
-          event_id: `${i}-${j}`,
-          title: 'Horario disponible',
-          start: new Date(`${item.date} ${hour}:00`),
-          end: new Date(`${item.date} ${hour + 1}:00`),
-          color: '#219653',
-        }))
+      const [availableSchedules, appointments] = await Promise.all([
+        AvailableSchedulesService.listByWeek(selectedDay),
+        AppointmentService.listByWeek(selectedDay),
+      ]);
+
+      setAvailableSchedules(availableSchedules);
+      setAppointments(appointments);
+
+      const newAppointments = appointments.flatMap((appointment) => {
+        const groupedHours: number[][] = groupConsecutiveHours(
+          appointment.hours,
+        );
+
+        return groupedHours.map((group: number[], j: number) => ({
+          event_id: `appointment-${appointment._id}-${j}`,
+          title: 'Cita',
+          start: new Date(`${appointment.date} ${group[0]}:00`),
+          end: new Date(`${appointment.date} ${group[group.length - 1]}:59`),
+          color: Colors.PRIMARY_950,
+          editable: false,
+          description: appointment.description,
+          teacherId: appointment.teacher,
+          subjectId: appointment.subject,
+        }));
+      });
+
+      const newData: any = availableSchedules.flatMap(
+        (item: IAvailableSchedule, i: number) => {
+          const groupedHours: number[][] = groupConsecutiveHours(item.hours);
+
+          return groupedHours.map((group: number[], j: number) => ({
+            event_id: `available-${item._id}-${j}`,
+            title: 'Horario disponible',
+            start: new Date(`${item.date} ${group[0]}:00`),
+            end: new Date(`${item.date} ${group[group.length - 1]}:59`),
+            color: Colors.SUCCESS,
+            editable: true,
+            date: item.date,
+            teacherId: item.teacherId,
+          }));
+        },
       );
-      setData(newData)
+
+      setData([...newData, ...newAppointments]);
     } catch (error: any) {
       toast.error(error?.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
-  const changeSelectedDay = (date: Date) => {
-    const day4 = dayjs(date).add(3, 'day');
-    setSelectedDay(day4.format('YYYY-MM-DD'));
+  const groupConsecutiveHours = (hours: number[]): number[][] => {
+    const sortedHours = [...hours].sort((a, b) => a - b);
+    const groupedHours: number[][] = [];
+
+    let currentGroup: number[] = [];
+    for (let i = 0; i < sortedHours.length; i++) {
+      if (
+        currentGroup.length === 0 ||
+        sortedHours[i] === currentGroup[currentGroup.length - 1] + 1
+      ) {
+        currentGroup.push(sortedHours[i]);
+      } else {
+        groupedHours.push([...currentGroup]);
+        currentGroup = [sortedHours[i]];
+      }
+    }
+
+    if (currentGroup.length > 0) {
+      groupedHours.push([...currentGroup]);
+    }
+
+    return groupedHours;
   };
 
   useEffect(() => {
     getSchedules();
   }, [selectedDay]);
 
+  useEffect(() => {
+    getSubjects();
+  }, []);
 
   return (
     <Scheduler
       // loading={loading}
       ref={calendarRef}
-      onSelectedDateChange={(e) => changeSelectedDay(e)}
       view="week"
       events={data}
       week={{
         weekDays: [0, 1, 2, 3, 4, 5, 6],
         startHour: 0,
         endHour: 24,
-        weekStartOn: 6,
+        weekStartOn: 1,
         step: 60,
       }}
       day={null}
@@ -73,6 +146,14 @@ const Dashboard = () => {
       deletable={false}
       editable={false}
       month={null}
+      customEditor={(e: SchedulerHelpers) => (
+        <SchedulingComponent
+          event={e}
+          subjects={subjects}
+          getSchedules={getSchedules}
+        />
+      )}
+      onEventClick={(e) => console.log(e)}
     />
   );
 };

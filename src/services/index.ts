@@ -1,3 +1,4 @@
+export { default as AppointmentService } from './AppointmentService';
 export { default as AuthService } from './AuthService';
 export { default as AvailableSchedulesService } from './AvailableSchedulesService';
 export { default as ServiceClass } from './ServiceClass';

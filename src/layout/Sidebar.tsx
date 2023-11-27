@@ -3,46 +3,57 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 import Logo from '../assets/images/logo-text.png';
 
-import { AiOutlineAppstore, AiOutlineBook,AiOutlineCalendar } from 'react-icons/ai';
+import {
+  AiOutlineAppstore,
+  AiOutlineBook,
+  AiOutlineCalendar,
+} from 'react-icons/ai';
 
 import { ISection } from '../interfaces';
-import { ROUTES, Sections } from '../enums';
+import { ROUTES, Roles, Sections } from '../enums';
 import { SidebarItem } from './SidebarItem';
+import { useAppSelector } from '../hooks';
+import { selectAuthSlice } from '../store/reducers/auth/authSlice';
 
-
-const SIDEBAR_SECTIONS: ISection[] = [{
-  path: Sections.SUBJECTS,
-  name: 'Materias',
-  Icon: <AiOutlineBook className="mr-1.5" />,
-  children: [
-    {
-      path: ROUTES.CREATE_SUBJECT,
-      name: 'Crear materia',
-    },
-    {
-      path: ROUTES.LIST_SUBJECTS,
-      name: 'Listar materias'
-    }
-  ],
-},
-{
-  path: Sections.AVAILABLE_SCHEDULES,
-  name: 'Horarios Disponibles',
-  Icon: <AiOutlineCalendar className="mr-1.5" />,
-  children: [
-    {
-      path: ROUTES.CREATE_AVAILABLE_SCHEDULES,
-      name: 'Crear horario disponible',
-    },
-  ],
-}
-]
+const SIDEBAR_SECTIONS: ISection[] = [
+  {
+    path: Sections.SUBJECTS,
+    name: 'Materias',
+    Icon: <AiOutlineBook className="mr-1.5" />,
+    children: [
+      {
+        path: ROUTES.CREATE_SUBJECT,
+        name: 'Crear materia',
+      },
+      {
+        path: ROUTES.LIST_SUBJECTS,
+        name: 'Listar materias',
+      },
+    ],
+    permissions: [Roles.ADMIN],
+  },
+  {
+    path: Sections.AVAILABLE_SCHEDULES,
+    name: 'Horarios Disponibles',
+    Icon: <AiOutlineCalendar className="mr-1.5" />,
+    children: [
+      {
+        path: ROUTES.CREATE_AVAILABLE_SCHEDULES,
+        name: 'Crear horario disponible',
+      },
+    ],
+    permissions: [Roles.TEACHER],
+  },
+];
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+
+  const { user } = useAppSelector(selectAuthSlice);
+
   const location = useLocation();
   const { pathname } = location;
 
@@ -89,12 +100,27 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-  const renderItem = (section: ISection) => <SidebarItem key={section.path} sidebarExpanded={sidebarExpanded} setSidebarExpanded={setSidebarExpanded} section={section} />
+  const renderItem = (section: ISection) => {
+
+     const hasPermission = section.permissions.some((condition) => {
+        return user.roles.includes(condition);
+      })
+
+      if(!hasPermission) return
+
+    return (
+    <SidebarItem
+      key={section.path}
+      sidebarExpanded={sidebarExpanded}
+      setSidebarExpanded={setSidebarExpanded}
+      section={section}
+    />
+  )};
 
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -150,7 +176,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </li>
               {/* <!-- Menu Item DashBoard --> */}
-                  {SIDEBAR_SECTIONS.map(renderItem)}
+              {SIDEBAR_SECTIONS.map(renderItem)}
 
               {/* <!-- Menu Item Materias --> */}
               {/* <SidebarLinkGroup
