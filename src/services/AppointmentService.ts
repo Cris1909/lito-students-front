@@ -36,6 +36,14 @@ class AppointmentService extends ServiceClass {
       body
     });
   }
+
+  async acceptAppointment(id: string, value: number) {
+    const body = {value}
+     return super.post({
+       path: `${this.path}/approve-appointment/${id}`,
+       body
+     });
+   }
 }
 
 export default new AppointmentService();

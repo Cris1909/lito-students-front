@@ -14,7 +14,7 @@ import {
 
 import { formatDateInLocalTimezone } from '../../helpers';
 import { IAppointment, IAvailableSchedule, ISubject } from '../../interfaces';
-import { AppointmentColors, Colors, Roles } from '../../enums';
+import { AppointmentColors, AppointmentStatusText, Colors, Roles } from '../../enums';
 import { SchedulingComponent } from './SchedulingComponent';
 import { Loader } from '../../common';
 import { useAppSelector } from '../../hooks';
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
         return groupedHours.map((group: number[], j: number) => ({
           event_id: `appointment-${appointment._id}-${j}`,
-          title: 'Agendado',
+          title: `${AppointmentStatusText[appointment.status]}`,
           start: new Date(`${appointment.date} ${group[0]}:00`),
           end: new Date(`${appointment.date} ${group[group.length - 1]}:59`),
           color: AppointmentColors[appointment.status],

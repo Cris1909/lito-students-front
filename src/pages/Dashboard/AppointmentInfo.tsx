@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { ISubject, IUser } from '../../interfaces';
 import { Image } from 'primereact/image';
-import { AppointmentColors, AppointmentStatus, Roles } from '../../enums';
+import { AppointmentColors, AppointmentStatus, AppointmentStatusText, Roles } from '../../enums';
 import { useAppSelector } from '../../hooks';
 import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
 
@@ -18,14 +18,6 @@ interface Props {
   status: AppointmentStatus;
   teacher: IUser;
 }
-
-const AppointmentStatusText = {
-  [AppointmentStatus.SOLICITED]: 'Solicitado',
-  [AppointmentStatus.PENDING]: 'Pendiente',
-  [AppointmentStatus.REJECTED]: 'Rechazado',
-  [AppointmentStatus.CONFIRMED]: 'Confirmado',
-  [AppointmentStatus.COMPLETED]: 'Completado',
-};
 
 export const AppointmentInfo: React.FC<Props> = ({
   date,
