@@ -10,6 +10,11 @@ import { MenuItem, TextField } from '@mui/material';
 import { ISubject } from '../../interfaces';
 import { GlobalButton } from '../../components';
 import { AppointmentService } from '../../services';
+import { CreateAppointment } from './CreateAppointment';
+import { useAppSelector } from '../../hooks';
+import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
+import { AppointmentStatus, Roles } from '../../enums';
+import { SolicitedAppointment } from './SolicitedAppointment';
 
 enum FormKeys {
   START = 'start',
@@ -27,7 +32,7 @@ interface IFormInput {
 interface Props {
   event: SchedulerHelpers;
   subjects: ISubject[];
-  getSchedules: () => {},
+  getSchedules: () => {};
 }
 
 const calculateHours = (start: Date, end: Date): number[] => {
@@ -39,81 +44,36 @@ const calculateHours = (start: Date, end: Date): number[] => {
   );
 };
 
-export const SchedulingComponent: React.FC<Props> = ({ event, subjects, getSchedules }) => {
+export const SchedulingComponent: React.FC<Props> = ({
+  event,
+  subjects,
+  getSchedules,
+}) => {
+  const { user } = useAppSelector(selectAuthSlice);
+
+  const { roles } = user;
+
+  const isStudent = roles.includes(Roles.STUDENT);
+
   const { state, edited }: any = event;
-  const start = state.start.value;
-  const end = state.end.value;
+  // const start = state.start.value;
+  // const end = state.end.value;
 
-  const { date, color, teacherId } = edited;
+  const { color, status } = edited;
 
-const [loading, setLoading] = useState(false)
+  const isAvailableSchedule = !status;
 
-  const [formData, setFormData] = useState<IFormInput>({
-    [FormKeys.START]: dayjs(start).toDate(),
-    [FormKeys.END]: dayjs(end).toDate(),
-    [FormKeys.SUBJECT]: subjects[0],
-    [FormKeys.DESCRIPTION]: '',
-  });
+  const isSolicited = status === AppointmentStatus.SOLICITED;
 
-  const [validationError, setValidationError] = useState<string | null>(null);
-
-  const validateHours = () => {
-    const startHour = dayjs(formData[FormKeys.START]).hour();
-    const endHour = dayjs(formData[FormKeys.END]).hour();
-
-    if (startHour > endHour) {
-      setValidationError('La hora de inicio debe ser menor que la hora de fin');
-      return false;
-    }
-
-    setValidationError(null);
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateHours()) return;
-    
-    const { end, start, description, subject } = formData;
-    
-    const hours = calculateHours(start, end);
-
-    const data = {
-      date,
-      hours,
-      teacher: teacherId,
-      description,
-      subject: subject._id,
-    };
-
-    
-    setLoading(true)
-    // setLoadingCalendar(true);
-    toast.loading('Cargando...', { id: 'loading' });
-    try {
-      await AppointmentService.createAppointment(data);
-      toast.success('Asesoría agendada exitosamente');
-      setLoading(true)
-      getSchedules()
-      event.close();
-    } catch (error: any) {
-      setLoading(false)
-      toast.error(error.message, { id: 'error' });
-    } finally {
-      toast.remove('loading');
-    }
-  };
+  const title = isSolicited ? 'Asesoría pendiente' : 'Programar Asesoría';
 
   return (
     <div className="">
       <div
-        className="flex justify-between mb-3 px-4 pt-8 pb-2"
+        className="flex justify-between mb-3 px-4 pt-8 pb-2 w-auto"
         style={{ backgroundColor: color }}
       >
-        <h3 className="text-2xl font-semibold text-white">
-          Programar Asesoría
-        </h3>
+        <h3 className="text-2xl font-semibold text-white">{title}</h3>
         <button
           className="text-form-strokedark duration-300 hover:text-white focus:outline-none mr-1"
           onClick={event.close}
@@ -123,82 +83,15 @@ const [loading, setLoading] = useState(false)
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="m-5">
-        <h2 className="mb-4">
-          Fecha: <span className="font-thin">{date}</span>
-        </h2>
-        <div className="flex gap-2.5">
-          <MobileTimePicker
-            label={'Inicio'}
-            defaultValue={dayjs(start)}
-            minTime={dayjs(start)}
-            maxTime={dayjs(end)}
-            views={['hours']}
-            format="hh:mm"
-            ampm={false}
-            onChange={(value) =>
-              setFormData({ ...formData, [FormKeys.START]: value?.toDate()! })
-            }
-          />
-          <MobileTimePicker
-            label={'Fin'}
-            defaultValue={dayjs(end)}
-            minTime={dayjs(start)}
-            maxTime={dayjs(end)}
-            views={['hours']}
-            format="hh:mm"
-            ampm={false}
-            onChange={(value) =>
-              setFormData({ ...formData, [FormKeys.END]: value?.toDate()! })
-            }
-          />
-        </div>
+      {isAvailableSchedule && isStudent ? (
+        <CreateAppointment
+          event={event}
+          getSchedules={getSchedules}
+          subjects={subjects}
+        />
+      ) : null}
 
-        <div className="flex mt-2.5 w-100">
-          <TextField
-            select
-            label="Materia"
-            defaultValue=""
-            className="w-100"
-            value={formData[FormKeys.SUBJECT]._id}
-            onChange={(e) => {
-              const selectedSubject = subjects.find(
-                (subject) => subject._id === e.target.value,
-              );
-              if (selectedSubject) {
-                setFormData({
-                  ...formData,
-                  [FormKeys.SUBJECT]: selectedSubject,
-                });
-              }
-            }}
-          >
-            {subjects.map((subject) => (
-              <MenuItem key={subject._id} value={subject._id}>
-                {subject.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-        <div className="mt-2.5">
-          <TextField
-            label="Descripción"
-            multiline
-            className="w-100"
-            helperText="Especifica el tema de la asesoría"
-            value={formData[FormKeys.DESCRIPTION]}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                [FormKeys.DESCRIPTION]: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mt-5">
-          <GlobalButton type='submit' disabled={loading} backgroundColor="success" text="Crear" />
-        </div>
-      </form>
+      {isSolicited ? <SolicitedAppointment event={event} getSchedules={getSchedules} />: null}
     </div>
   );
 };

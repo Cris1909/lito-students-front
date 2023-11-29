@@ -14,11 +14,20 @@ import {
 
 import { formatDateInLocalTimezone } from '../../helpers';
 import { IAppointment, IAvailableSchedule, ISubject } from '../../interfaces';
-import { Colors } from '../../enums';
+import { AppointmentColors, Colors, Roles } from '../../enums';
 import { SchedulingComponent } from './SchedulingComponent';
 import { Loader } from '../../common';
+import { useAppSelector } from '../../hooks';
+import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
 
 const Dashboard = () => {
+  const { user } = useAppSelector(selectAuthSlice);
+
+  const { roles } = user;
+
+  const isStudent = roles.includes(Roles.STUDENT);
+  const isTeacher = roles.includes(Roles.TEACHER);
+
   const [selectedDay, setSelectedDay] = useState(formatDateInLocalTimezone());
 
   const [availableSchedules, setAvailableSchedules] = useState<
@@ -60,14 +69,16 @@ const Dashboard = () => {
 
         return groupedHours.map((group: number[], j: number) => ({
           event_id: `appointment-${appointment._id}-${j}`,
-          title: 'Cita',
+          title: 'Agendado',
           start: new Date(`${appointment.date} ${group[0]}:00`),
           end: new Date(`${appointment.date} ${group[group.length - 1]}:59`),
-          color: Colors.PRIMARY_950,
-          editable: false,
-          description: appointment.description,
-          teacherId: appointment.teacher,
-          subjectId: appointment.subject,
+          color: AppointmentColors[appointment.status],
+          editable: true,
+          // description: appointment.description,
+          // teacherId: appointment.teacher,
+          // subjectId: appointment.subject,
+          // status: appointment.status
+          ...appointment
         }));
       });
 
@@ -77,13 +88,14 @@ const Dashboard = () => {
 
           return groupedHours.map((group: number[], j: number) => ({
             event_id: `available-${item._id}-${j}`,
-            title: 'Horario disponible',
+            title: 'Disponible',
             start: new Date(`${item.date} ${group[0]}:00`),
             end: new Date(`${item.date} ${group[group.length - 1]}:59`),
-            color: Colors.SUCCESS,
-            editable: true,
-            date: item.date,
-            teacherId: item.teacherId,
+            color: Colors.AVAILABLE,
+            editable: isStudent,
+            // date: item.date,
+            // teacherId: item.teacherId,
+            ...item,
           }));
         },
       );
