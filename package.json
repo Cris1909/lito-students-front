@@ -17,6 +17,7 @@
     "@aldabil/react-scheduler": "^2.7.26",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@floating-ui/dom": "^1.5.3",
     "@mui/material": "^5.14.18",
     "@mui/x-date-pickers": "^6.18.2",
     "@reduxjs/toolkit": "^1.9.7",
