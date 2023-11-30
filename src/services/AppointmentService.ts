@@ -28,6 +28,22 @@ class AppointmentService extends ServiceClass {
       params,
     });
   }
+
+  async rejectAppointment(id: string, rejectMessage: string) {
+   const body = {rejectMessage}
+    return super.patch({
+      path: `${this.path}/reject-appointment/${id}`,
+      body
+    });
+  }
+
+  async acceptAppointment(id: string, value: number) {
+    const body = {value}
+     return super.post({
+       path: `${this.path}/approve-appointment/${id}`,
+       body
+     });
+   }
 }
 
 export default new AppointmentService();
