@@ -118,7 +118,6 @@ const [loading, setLoading] = useState(false)
             maxTime={dayjs(end)}
             views={['hours']}
             format="hh:mm"
-            ampm={false}
             onChange={(value) =>
               setFormData({ ...formData, [FormKeys.START]: value?.toDate()! })
             }
@@ -131,7 +130,7 @@ const [loading, setLoading] = useState(false)
             maxTime={dayjs(end)}
             views={['hours']}
             format="hh:mm"
-            ampm={false}
+            ampm={true}
             onChange={(value) =>
               setFormData({ ...formData, [FormKeys.END]: value?.toDate()! })
             }

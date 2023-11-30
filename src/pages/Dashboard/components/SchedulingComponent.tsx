@@ -76,7 +76,7 @@ export const SchedulingComponent: React.FC<Props> = ({
       >
         <h3 className="text-2xl font-semibold text-white">{title}</h3>
         <button
-          className="text-form-strokedark duration-300 hover:text-white focus:outline-none mr-1"
+          className="font-bold text-inactive duration-300 hover:text-white focus:outline-none mr-1"
           onClick={event.close}
           aria-label="Cerrar modal"
         >

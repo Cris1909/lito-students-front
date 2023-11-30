@@ -163,11 +163,9 @@ const Dashboard = () => {
       ) {
         currentGroup.push(sortedHours[i]);
       } else {
-        // Verificar si el grupo actual incluye la hora actual
         const includesCurrentHour = currentGroup.includes(currentHour);
 
         if (includesCurrentHour) {
-          // Dividir en dos grupos: antes de la hora actual y después de la hora actual
           const index = currentGroup.indexOf(currentHour);
           const beforeCurrentHour = currentGroup.slice(0, index);
           const afterCurrentHour = currentGroup.slice(index);
@@ -187,11 +185,9 @@ const Dashboard = () => {
     }
 
     if (currentGroup.length > 0) {
-      // Verificar si el grupo actual incluye la hora actual
       const includesCurrentHour = currentGroup.includes(currentHour);
 
       if (includesCurrentHour) {
-        // Dividir en dos grupos: antes de la hora actual y después de la hora actual
         const index = currentGroup.indexOf(currentHour);
         const beforeCurrentHour = currentGroup.slice(0, index);
         const afterCurrentHour = currentGroup.slice(index);

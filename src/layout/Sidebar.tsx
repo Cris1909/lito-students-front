@@ -5,6 +5,7 @@ import Logo from '../assets/images/logo-text-white.png';
 
 import {
   AiOutlineAppstore,
+  AiOutlineBarChart,
   AiOutlineBook,
   AiOutlineCalendar,
 } from 'react-icons/ai';
@@ -43,6 +44,18 @@ const SIDEBAR_SECTIONS: ISection[] = [
       },
     ],
     permissions: [Roles.TEACHER],
+  },
+  {
+    path: Sections.STATISTICS,
+    name: 'Estadísticas',
+    Icon: <AiOutlineBarChart className="mr-1.5" />,
+    children: [
+      {
+        path: ROUTES.STATISTICS,
+        name: 'Mostrar Estadísticas',
+      },
+    ],
+    permissions: [Roles.ADMIN],
   },
 ];
 interface SidebarProps {

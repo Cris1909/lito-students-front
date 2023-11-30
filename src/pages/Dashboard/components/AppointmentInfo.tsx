@@ -12,6 +12,7 @@ import { useAppSelector } from '../../../hooks';
 import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
 import { AppointmentService } from '../../../services';
 import { PaymentStatusText } from '../../../enums/PaymentStatus';
+import { formatTime } from '../../../helpers';
 
 interface Props {
   date: string;
@@ -44,8 +45,8 @@ export const AppointmentInfo: React.FC<Props> = ({
 
   const { img } = subject;
 
-  const hourStart = `${dayjs(start).get('hour')}:00`;
-  const hourEnd = `${dayjs(end).get('hour')}:59`;
+  const hourStart = formatTime(dayjs(start).get('hour'), '00');
+  const hourEnd = formatTime(dayjs(end).get('hour'), '59');
 
   const color = AppointmentColors[status];
 

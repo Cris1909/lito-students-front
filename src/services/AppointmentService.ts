@@ -1,6 +1,6 @@
 import ServiceClass from './ServiceClass';
 
-import { IAppointment, IDataAppointment } from '../interfaces';
+import { IAppointment, IDataAppointment, ISubject } from '../interfaces';
 
 interface ICreateAppointment {
   date: string;
@@ -77,6 +77,34 @@ class AppointmentService extends ServiceClass {
       path: `${this.path}/add-review/${id}`,
       hasToken: true,
       body,
+    });
+  }
+
+  async getAppointmentsBySubject() {
+    return super.get<{count: number, subject: ISubject}[]>({
+      path: `${this.path}/subject-appointments`,
+      hasToken: true,
+    });
+  }
+
+  async getAppointmentHours() {
+    return super.get<number>({
+      path: `${this.path}/appointment-stats`,
+      hasToken: true,
+    });
+  }
+  
+  async getAverageRating() {
+    return super.get<number>({
+      path: `${this.path}/average-ratings`,
+      hasToken: true,
+    });
+  }
+
+  async getCompletedAppointments() {
+    return super.get<number>({
+      path: `${this.path}/total-appointments-completed`,
+      hasToken: true,
     });
   }
 }
