@@ -116,7 +116,6 @@ export const SolicitedAppointment: React.FC<Props> = ({
         ) : null}
       </div>
 
-      {/* Modal for reject message */}
       <Modal
         open={modalRejectOpen}
         onClose={handleCloseModal}
@@ -145,25 +144,22 @@ export const SolicitedAppointment: React.FC<Props> = ({
         </div>
       </Modal>
 
-      {/* Modal for accept value */}
       <Modal
         open={modalAcceptOpen}
         onClose={handleCloseModal}
         className="modal flex justify-center items-center"
       >
         <div className="modal-content p-4 pt-6 bg-white rounded shadow-md w-100">
-          {/* <TextField /> */}
           <h3 className="text-xl font-satoshi mb-2">
             Ingresa el monto a cobrar
           </h3>
 
           <InputNumber
-          
             inputId="currency-us"
             value={acceptValue}
             onValueChange={(e) => setAcceptValue(e.value!)}
             mode="decimal"
-            prefix="$ " 
+            prefix="$ "
             suffix="  COP"
             min={0}
             showButtons

@@ -205,7 +205,7 @@ export const SignUp = () => {
           type="email"
           rules={emailValidations}
           placeholder={'example@gmail.com'}
-          autoComplete="email"
+          autoComplete="off"
           error={errors[FormKeys.EMAIL]}
         />
 
@@ -237,6 +237,7 @@ export const SignUp = () => {
           autoComplete="off"
           rules={passwordValidations}
           error={errors[FormKeys.PASSWORD]}
+          
         />
 
         <div className="mb-5">

@@ -142,7 +142,6 @@ const Dashboard = () => {
 
   return (
     <Scheduler
-      // loading={loading}
       ref={calendarRef}
       view="week"
       events={data}

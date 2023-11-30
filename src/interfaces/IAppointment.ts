@@ -1,5 +1,4 @@
-import { ISubject } from './ISubject';
-import { IUser } from './IUser';
+import { IPayment, IUser, ISubject} from '.';
 import { AppointmentStatus } from '../enums';
 
 export interface IAppointment {
@@ -11,4 +10,5 @@ export interface IAppointment {
   user: IUser,
   subject: ISubject,
   status: AppointmentStatus
+  payment?: IPayment
 }

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import Logo from '../assets/images/logo-text.png';
+import Logo from '../assets/images/logo-text-white.png';
 
 import {
   AiOutlineAppstore,
