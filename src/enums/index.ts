@@ -1,4 +1,5 @@
 export * from './AppointmentStatus';
+export * from './Breakpoints';
 export * from './Colors';
 export * from './Errors';
 export * from './LocalStorageKeys';

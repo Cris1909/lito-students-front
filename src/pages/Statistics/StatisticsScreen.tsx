@@ -8,6 +8,8 @@ import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
 import { AppointmentService, AuthService } from '../../services';
 import { Loader } from '../../common';
 import { IAppointment, ISubject } from '../../interfaces';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { Breakpoints } from '../../enums';
 
 const StatisticsScreen = () => {
   const { user } = useAppSelector(selectAuthSlice);
@@ -21,6 +23,14 @@ const StatisticsScreen = () => {
   const [averageRating, setAverageRating] = useState<number>(0);
   const [completedAppointments, setCompletedAppointments] = useState<number>(0);
   const [pieData, setPieData] = useState<any>([]);
+
+  const breakpoint = useBreakpoint();
+
+  const isSmallScreen = [
+    Breakpoints.XS,
+  ].includes(breakpoint);
+
+  const pieHeight = isSmallScreen ? 150 : 200
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +122,7 @@ const StatisticsScreen = () => {
 
       <div className="mt-4 w-full">
         <div className="bg-white p-4 rounded-lg flex items-center shadow-4">
-          <div>
+          <div className="w-full">
             <p className="text-lg font-semibold">
               Cantidad de asesorías por materia
             </p>
@@ -120,10 +130,17 @@ const StatisticsScreen = () => {
               series={[
                 {
                   data: pieData,
+                  highlightScope: { faded: 'global', highlighted: 'item' },
+                  faded: {
+                    innerRadius: 10,
+                    additionalRadius: -10,
+                    color: 'gray',
+                  },
+                  
                 },
+
               ]}
-              width={400}
-              height={200}
+              height={pieHeight}
             />
           </div>
         </div>
