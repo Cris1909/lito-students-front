@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { IAppointment, IPayment, ISubject, IUser } from '../../interfaces';
+import { IAppointment, IPayment, ISubject, IUser } from '../../../interfaces';
 import { Image } from 'primereact/image';
 import {
   AppointmentColors,
   AppointmentStatus,
   AppointmentStatusText,
   Roles,
-} from '../../enums';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
-import { AppointmentService } from '../../services';
-import { PaymentStatusText } from '../../enums/PaymentStatus';
+} from '../../../enums';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { AppointmentService } from '../../../services';
+import { PaymentStatusText } from '../../../enums/PaymentStatus';
 
 interface Props {
   date: string;

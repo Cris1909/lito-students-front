@@ -4,13 +4,13 @@ import { Modal, Rating, TextField } from '@mui/material';
 import toast from 'react-hot-toast';
 
 import { AppointmentInfo } from './AppointmentInfo';
-import { GlobalButton } from '../../components';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
-import { Roles } from '../../enums';
-import { IAppointment, IDataAppointment } from '../../interfaces';
+import { GlobalButton } from '../../../components';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { Roles } from '../../../enums';
+import { IAppointment, IDataAppointment } from '../../../interfaces';
 import dayjs from 'dayjs';
-import { AppointmentService } from '../../services';
+import { AppointmentService } from '../../../services';
 
 interface Props {
   event: SchedulerHelpers;

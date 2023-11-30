@@ -1,9 +1,9 @@
-export * from './AppointmentInfo';
-export * from './CompleteAppointment';
-export * from './ConfirmedAppointment';
-export * from './CreateAppointment';
+export * from './components/AppointmentInfo';
+export * from './components/CompleteAppointment';
+export * from './components/ConfirmedAppointment';
+export * from './components/CreateAppointment';
 export { default as Dashboard } from './Dashboard';
-export { default as ECommerce } from './ECommerce';
-export * from './PendingAppointment';
-export * from './SchedulingComponent';
-export * from './SolicitedAppointment';
+export { default as ECommerce } from './components/ECommerce';
+export * from './components/PendingAppointment';
+export * from './components/SchedulingComponent';
+export * from './components/SolicitedAppointment';

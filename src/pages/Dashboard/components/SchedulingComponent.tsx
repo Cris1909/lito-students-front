@@ -3,16 +3,16 @@ import dayjs from 'dayjs';
 
 import 'react-responsive-modal/styles.css';
 
-import { IAppointment, ISubject } from '../../interfaces';
+import { IAppointment, ISubject } from '../../../interfaces';
 import { CreateAppointment } from './CreateAppointment';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
-import { AppointmentStatus, Roles } from '../../enums';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { AppointmentStatus, Roles } from '../../../enums';
 import { SolicitedAppointment } from './SolicitedAppointment';
 import { PendingAppointment } from './PendingAppointment';
 import { useEffect, useState } from 'react';
-import { AppointmentService } from '../../services';
-import { ConfirmedAppointment } from '.';
+import { AppointmentService } from '../../../services';
+import { ConfirmedAppointment } from '..';
 import { CompletedAppointment } from './CompleteAppointment';
 
 interface Props {

@@ -7,9 +7,9 @@ import { MobileTimePicker } from '@mui/x-date-pickers';
 import 'react-responsive-modal/styles.css';
 
 import { MenuItem, TextField } from '@mui/material';
-import { ISubject } from '../../interfaces';
-import { GlobalButton } from '../../components';
-import { AppointmentService } from '../../services';
+import { ISubject } from '../../../interfaces';
+import { GlobalButton } from '../../../components';
+import { AppointmentService } from '../../../services';
 
 enum FormKeys {
   START = 'start',

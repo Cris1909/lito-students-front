@@ -7,11 +7,11 @@ import toast from 'react-hot-toast';
 import { InputNumber } from 'primereact/inputnumber';
 
 import { AppointmentInfo } from './AppointmentInfo';
-import { GlobalButton } from '../../components';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
-import { Roles } from '../../enums';
-import { AppointmentService } from '../../services';
+import { GlobalButton } from '../../../components';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { Roles } from '../../../enums';
+import { AppointmentService } from '../../../services';
 
 interface Props {
   event: SchedulerHelpers;

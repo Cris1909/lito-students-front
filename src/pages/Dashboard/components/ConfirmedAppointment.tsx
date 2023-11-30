@@ -9,12 +9,12 @@ import {
 } from 'react-hook-form';
 
 import { AppointmentInfo } from './AppointmentInfo';
-import { GlobalButton } from '../../components';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
-import { Roles } from '../../enums';
-import { AppointmentService } from '../../services';
-import { IAppointment, IDataAppointment } from '../../interfaces';
+import { GlobalButton } from '../../../components';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { Roles } from '../../../enums';
+import { AppointmentService } from '../../../services';
+import { IAppointment, IDataAppointment } from '../../../interfaces';
 import dayjs from 'dayjs';
 
 interface Props {
