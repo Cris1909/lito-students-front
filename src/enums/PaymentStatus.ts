@@ -9,5 +9,5 @@ export const PaymentStatusText = {
   [PaymentStatus.PENDING]: 'Pendiente',
   [PaymentStatus.DENIED]: 'Rechazado',
   [PaymentStatus.CONFIRMED]: 'Confirmado',
-  [PaymentStatus.CANCELED]: 'Completado',
+  [PaymentStatus.CANCELED]: 'Cancelado',
 };

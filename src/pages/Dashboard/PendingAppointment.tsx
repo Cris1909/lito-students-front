@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { SchedulerHelpers } from '@aldabil/react-scheduler/types';
 import { FiClock } from 'react-icons/fi';
-import { FaPlus, FaMinus } from 'react-icons/fa';
 import { Modal, TextField } from '@mui/material';
 import toast from 'react-hot-toast';
-import { InputNumber } from 'primereact/inputnumber';
 
 import { AppointmentInfo } from './AppointmentInfo';
 import { GlobalButton } from '../../components';
@@ -47,7 +45,6 @@ export const PendingAppointment: React.FC<Props> = ({
   const [modalConfirmPayOpen, setModalConfirmPayOpen] = useState(false);
 
   const [rejectMessage, setRejectMessage] = useState('');
-  const [acceptValue, setAcceptValue] = useState(0);
 
   const handleOpenRejectModal = () => {
     setModalRejectOpen(true);

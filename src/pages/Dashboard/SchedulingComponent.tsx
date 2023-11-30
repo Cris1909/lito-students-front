@@ -12,6 +12,7 @@ import { SolicitedAppointment } from './SolicitedAppointment';
 import { PendingAppointment } from './PendingAppointment';
 import { useEffect, useState } from 'react';
 import { AppointmentService } from '../../services';
+import { ConfirmedAppointment } from '.';
 
 interface Props {
   event: SchedulerHelpers;
@@ -25,14 +26,13 @@ export const SchedulingComponent: React.FC<Props> = ({
   getSchedules,
 }) => {
   const { user } = useAppSelector(selectAuthSlice);
-  
+
   const { roles } = user;
-  
+
   const isStudent = roles.includes(Roles.STUDENT);
 
   const [appointment, setAppointment] = useState<IAppointment | null>(null);
 
-  
   const { state, edited }: any = event;
   const start = state.start.value;
   const end = state.end.value;
@@ -43,7 +43,7 @@ export const SchedulingComponent: React.FC<Props> = ({
 
   const isSolicited = status === AppointmentStatus.SOLICITED;
   const isPending = status === AppointmentStatus.PENDING;
-
+  const isConfirmed = status === AppointmentStatus.CONFIRMED;
 
   const getAppointment = async () => {
     try {
@@ -60,6 +60,8 @@ export const SchedulingComponent: React.FC<Props> = ({
     ? 'Asesoría pendiente'
     : isPending
     ? 'Asesoría pendiente'
+    : isConfirmed
+    ? 'Asesoría confirmada'
     : 'Programar Asesoría';
 
   return (
@@ -91,8 +93,20 @@ export const SchedulingComponent: React.FC<Props> = ({
       ) : null}
 
       {isPending ? (
-        <PendingAppointment event={event} getSchedules={getSchedules} appointment={appointment} />
+        <PendingAppointment
+          event={event}
+          getSchedules={getSchedules}
+          appointment={appointment}
+        />
       ) : null}
+
+      {
+        isConfirmed ? <ConfirmedAppointment    
+        event={event}
+        getSchedules={getSchedules}
+        appointment={appointment}
+        /> : null
+      }
     </div>
   );
 };

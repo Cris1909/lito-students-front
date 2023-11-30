@@ -1,6 +1,6 @@
 import ServiceClass from './ServiceClass';
 
-import { IAppointment } from '../interfaces';
+import { IAppointment, IDataAppointment } from '../interfaces';
 
 interface ICreateAppointment {
   date: string;
@@ -60,6 +60,15 @@ class AppointmentService extends ServiceClass {
     return super.post({
       path: `${this.path}/confirm-appointment/${id}`,
       hasToken: true
+    });
+  }
+
+  async completedAppointment(id: string, data: IDataAppointment[]) {
+    const body = { data };
+    return super.patch({
+      path: `${this.path}/complete-appointment/${id}`,
+      hasToken: true,
+      body
     });
   }
 }
