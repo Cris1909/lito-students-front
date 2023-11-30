@@ -1,10 +1,18 @@
 import dayjs from 'dayjs';
-import React from 'react';
-import { ISubject, IUser } from '../../interfaces';
+import React, { useEffect, useState } from 'react';
+import { IAppointment, IPayment, ISubject, IUser } from '../../../interfaces';
 import { Image } from 'primereact/image';
-import { AppointmentColors, AppointmentStatus, AppointmentStatusText, Roles } from '../../enums';
-import { useAppSelector } from '../../hooks';
-import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
+import {
+  AppointmentColors,
+  AppointmentStatus,
+  AppointmentStatusText,
+  Roles,
+} from '../../../enums';
+import { useAppSelector } from '../../../hooks';
+import { selectAuthSlice } from '../../../store/reducers/auth/authSlice';
+import { AppointmentService } from '../../../services';
+import { PaymentStatusText } from '../../../enums/PaymentStatus';
+import { formatTime } from '../../../helpers';
 
 interface Props {
   date: string;
@@ -17,6 +25,8 @@ interface Props {
   createdAt: string;
   status: AppointmentStatus;
   teacher: IUser;
+  _id: string;
+  payment?: IPayment
 }
 
 export const AppointmentInfo: React.FC<Props> = ({
@@ -29,18 +39,30 @@ export const AppointmentInfo: React.FC<Props> = ({
   createdAt,
   status,
   teacher,
+  payment
 }) => {
   const { roles } = useAppSelector(selectAuthSlice).user;
 
   const { img } = subject;
 
-  const hourStart = `${dayjs(start).get('hour')}:00`;
-  const hourEnd = `${dayjs(end).get('hour')}:59`;
+  const hourStart = formatTime(dayjs(start).get('hour'), '00');
+  const hourEnd = formatTime(dayjs(end).get('hour'), '59');
 
   const color = AppointmentColors[status];
 
   const isStudent = roles.includes(Roles.STUDENT);
   const isTeacher = roles.includes(Roles.TEACHER);
+
+  const isPending = status === AppointmentStatus.PENDING;
+  const isConfirmed = status === AppointmentStatus.CONFIRMED;
+
+
+
+  const paymentText = isConfirmed
+    ? 'Valor pagado: '
+    : isPending
+    ? 'Valor a pagar: '
+    : 'Valor: ';
 
   return (
     <div className="w-full">
@@ -67,11 +89,12 @@ export const AppointmentInfo: React.FC<Props> = ({
                   Correo: <span className="font-thin">{user.email}</span>
                 </p>
                 <p>
-                  Teléfono: <span className="font-thin">{user.phoneNumber}</span>
+                  Teléfono:{' '}
+                  <span className="font-thin">{user.phoneNumber}</span>
                 </p>
               </div>
             ) : null}
-               {isStudent ? (
+            {isStudent ? (
               <div className="w-1/2 sm:w-full sm:mb-2.5">
                 <p>
                   Profesor: <span className="font-thin">{teacher.name}</span>
@@ -80,7 +103,8 @@ export const AppointmentInfo: React.FC<Props> = ({
                   Correo: <span className="font-thin">{teacher.email}</span>
                 </p>
                 <p>
-                  Teléfono: <span className="font-thin">{teacher.phoneNumber}</span>
+                  Teléfono:{' '}
+                  <span className="font-thin">{teacher.phoneNumber}</span>
                 </p>
               </div>
             ) : null}
@@ -100,6 +124,22 @@ export const AppointmentInfo: React.FC<Props> = ({
                   {AppointmentStatusText[status]}
                 </span>
               </p>
+              {payment ? (
+                <>
+                  <p>
+                    {paymentText}
+                    <span className="font-thin">
+                      $ {payment?.value.toLocaleString('en')} COP
+                    </span>
+                  </p>
+                  <p>
+                    Estado de pago:{' '}
+                    <span className="font-thin">
+                      {PaymentStatusText[payment?.status!]}
+                    </span>
+                  </p>
+                </>
+              ) : null}
             </div>
           </div>
         </div>

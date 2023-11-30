@@ -1,6 +1,6 @@
 import ServiceClass from './ServiceClass';
 
-import { IAppointment } from '../interfaces';
+import { IAppointment, IDataAppointment, ISubject } from '../interfaces';
 
 interface ICreateAppointment {
   date: string;
@@ -26,24 +26,87 @@ class AppointmentService extends ServiceClass {
     return super.get<IAppointment[]>({
       path: `${this.path}/list-by-week`,
       params,
+      hasToken: true,
     });
   }
 
   async rejectAppointment(id: string, rejectMessage: string) {
-   const body = {rejectMessage}
+    const body = { rejectMessage };
     return super.patch({
       path: `${this.path}/reject-appointment/${id}`,
-      body
+      body,
+      hasToken: true,
     });
   }
 
   async acceptAppointment(id: string, value: number) {
-    const body = {value}
-     return super.post({
-       path: `${this.path}/approve-appointment/${id}`,
-       body
-     });
-   }
+    const body = { value };
+    return super.post({
+      path: `${this.path}/approve-appointment/${id}`,
+      body,
+      hasToken: true,
+    });
+  }
+
+  async getById(id: string) {
+    return super.get<IAppointment>({
+      path: `${this.path}/appointment-by-id/${id}`,
+      hasToken: true,
+    });
+  }
+
+  async confirmAppointment(id: string) {
+    return super.post({
+      path: `${this.path}/confirm-appointment/${id}`,
+      hasToken: true,
+    });
+  }
+
+  async completedAppointment(id: string, data: IDataAppointment[]) {
+    const body = { data };
+    return super.patch({
+      path: `${this.path}/complete-appointment/${id}`,
+      hasToken: true,
+      body,
+    });
+  }
+
+  async addReview(id: string, value: number, text: string) {
+    const body = { value, text };
+    return super.post({
+      path: `${this.path}/add-review/${id}`,
+      hasToken: true,
+      body,
+    });
+  }
+
+  async getAppointmentsBySubject() {
+    return super.get<{count: number, subject: ISubject}[]>({
+      path: `${this.path}/subject-appointments`,
+      hasToken: true,
+    });
+  }
+
+  async getAppointmentHours() {
+    return super.get<number>({
+      path: `${this.path}/appointment-stats`,
+      hasToken: true,
+    });
+  }
+  
+  async getAverageRating() {
+    return super.get<number>({
+      path: `${this.path}/average-ratings`,
+      hasToken: true,
+    });
+  }
+
+  async getCompletedAppointments() {
+    return super.get<number>({
+      path: `${this.path}/total-appointments-completed`,
+      hasToken: true,
+    });
+  }
 }
 
 export default new AppointmentService();

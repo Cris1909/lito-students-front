@@ -14,11 +14,17 @@ import {
 
 import { formatDateInLocalTimezone } from '../../helpers';
 import { IAppointment, IAvailableSchedule, ISubject } from '../../interfaces';
-import { AppointmentColors, AppointmentStatusText, Colors, Roles } from '../../enums';
-import { SchedulingComponent } from './SchedulingComponent';
+import {
+  AppointmentColors,
+  AppointmentStatusText,
+  Colors,
+  Roles,
+} from '../../enums';
+import { SchedulingComponent } from './components';
 import { Loader } from '../../common';
 import { useAppSelector } from '../../hooks';
 import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
+import dayjs from 'dayjs';
 
 const Dashboard = () => {
   const { user } = useAppSelector(selectAuthSlice);
@@ -74,29 +80,41 @@ const Dashboard = () => {
           end: new Date(`${appointment.date} ${group[group.length - 1]}:59`),
           color: AppointmentColors[appointment.status],
           editable: true,
-          // description: appointment.description,
-          // teacherId: appointment.teacher,
-          // subjectId: appointment.subject,
-          // status: appointment.status
-          ...appointment
+          ...appointment,
         }));
       });
 
       const newData: any = availableSchedules.flatMap(
         (item: IAvailableSchedule, i: number) => {
-          const groupedHours: number[][] = groupConsecutiveHours(item.hours);
+          const groupedHours: number[][] = dayjs().isSame(item.date, 'day')
+            ? groupConsecutiveHoursSameDay(item.hours)
+            : groupConsecutiveHours(item.hours);
 
-          return groupedHours.map((group: number[], j: number) => ({
-            event_id: `available-${item._id}-${j}`,
-            title: 'Disponible',
-            start: new Date(`${item.date} ${group[0]}:00`),
-            end: new Date(`${item.date} ${group[group.length - 1]}:59`),
-            color: Colors.AVAILABLE,
-            editable: isStudent,
-            // date: item.date,
-            // teacherId: item.teacherId,
-            ...item,
-          }));
+          return groupedHours.map((group: number[], j: number) => {
+            const startHour = group[0];
+            const endHour = group[group.length - 1];
+            const start = new Date(`${item.date} ${startHour}:00`);
+            const end = new Date(`${item.date} ${endHour}:59`);
+
+            // Verificar si el intervalo ya pasó
+            const hasPassed = dayjs().isAfter(end);
+
+            // Verificar si el intervalo está actualmente disponible
+            const isCurrent =
+              !hasPassed && dayjs().isAfter(start) && dayjs().isBefore(end);
+
+            return {
+              event_id: `available-${item._id}-${j}`,
+              title: isCurrent ? 'Disponible (Hora actual)' : 'Disponible',
+              start,
+              end,
+              color: hasPassed ? Colors.UNAVAILABLE : Colors.AVAILABLE,
+              editable: isStudent && !hasPassed,
+              // date: item.date,
+              // teacherId: item.teacherId,
+              ...item,
+            };
+          });
         },
       );
 
@@ -132,6 +150,62 @@ const Dashboard = () => {
     return groupedHours;
   };
 
+  const groupConsecutiveHoursSameDay = (hours: number[]): number[][] => {
+    const sortedHours = [...hours].sort((a, b) => a - b);
+    const groupedHours: number[][] = [];
+    const currentHour = new Date().getHours();
+
+    let currentGroup: number[] = [];
+    for (let i = 0; i < sortedHours.length; i++) {
+      if (
+        currentGroup.length === 0 ||
+        sortedHours[i] === currentGroup[currentGroup.length - 1] + 1
+      ) {
+        currentGroup.push(sortedHours[i]);
+      } else {
+        const includesCurrentHour = currentGroup.includes(currentHour);
+
+        if (includesCurrentHour) {
+          const index = currentGroup.indexOf(currentHour);
+          const beforeCurrentHour = currentGroup.slice(0, index);
+          const afterCurrentHour = currentGroup.slice(index);
+
+          if (beforeCurrentHour.length > 0) {
+            groupedHours.push([...beforeCurrentHour]);
+          }
+          if (afterCurrentHour.length > 0) {
+            groupedHours.push([...afterCurrentHour]);
+          }
+        } else {
+          groupedHours.push([...currentGroup]);
+        }
+
+        currentGroup = [sortedHours[i]];
+      }
+    }
+
+    if (currentGroup.length > 0) {
+      const includesCurrentHour = currentGroup.includes(currentHour);
+
+      if (includesCurrentHour) {
+        const index = currentGroup.indexOf(currentHour);
+        const beforeCurrentHour = currentGroup.slice(0, index);
+        const afterCurrentHour = currentGroup.slice(index);
+
+        if (beforeCurrentHour.length > 0) {
+          groupedHours.push([...beforeCurrentHour]);
+        }
+        if (afterCurrentHour.length > 0) {
+          groupedHours.push([...afterCurrentHour]);
+        }
+      } else {
+        groupedHours.push([...currentGroup]);
+      }
+    }
+
+    return groupedHours;
+  };
+
   useEffect(() => {
     getSchedules();
   }, [selectedDay]);
@@ -142,7 +216,6 @@ const Dashboard = () => {
 
   return (
     <Scheduler
-      // loading={loading}
       ref={calendarRef}
       view="week"
       events={data}

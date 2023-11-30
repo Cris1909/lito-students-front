@@ -41,6 +41,13 @@ class AuthService extends ServiceClass {
       hasToken: true
     })
   }
+
+  async getStudentsCount() {
+    return super.get<number>({
+      path: `${this.path}/students-count`,
+      hasToken: true,
+    });
+  }
   
 }
 

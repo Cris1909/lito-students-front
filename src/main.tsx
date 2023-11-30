@@ -12,7 +12,7 @@ import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
@@ -22,5 +22,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Provider>
       </ThemeProvider>
     </LocalizationProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

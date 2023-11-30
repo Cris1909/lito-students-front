@@ -7,4 +7,5 @@ export enum ROUTES {
   CREATE_SUBJECT = `/${Sections.SUBJECTS}/create`,
   LIST_SUBJECTS = `/${Sections.SUBJECTS}/list`,
   CREATE_AVAILABLE_SCHEDULES = `/${Sections.AVAILABLE_SCHEDULES}/create`,
+  STATISTICS = `/${Sections.STATISTICS}/get`,
 }

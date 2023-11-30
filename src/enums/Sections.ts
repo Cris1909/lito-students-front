@@ -3,4 +3,5 @@ export enum Sections {
   DASHBOARD = 'dashboard',
   SUBJECTS = 'subjects',
   AVAILABLE_SCHEDULES = 'available-schedules',
+  STATISTICS = 'statistics',
 }

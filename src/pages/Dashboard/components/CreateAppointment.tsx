@@ -7,9 +7,9 @@ import { MobileTimePicker } from '@mui/x-date-pickers';
 import 'react-responsive-modal/styles.css';
 
 import { MenuItem, TextField } from '@mui/material';
-import { ISubject } from '../../interfaces';
-import { GlobalButton } from '../../components';
-import { AppointmentService } from '../../services';
+import { ISubject } from '../../../interfaces';
+import { GlobalButton } from '../../../components';
+import { AppointmentService } from '../../../services';
 
 enum FormKeys {
   START = 'start',
@@ -118,7 +118,6 @@ const [loading, setLoading] = useState(false)
             maxTime={dayjs(end)}
             views={['hours']}
             format="hh:mm"
-            ampm={false}
             onChange={(value) =>
               setFormData({ ...formData, [FormKeys.START]: value?.toDate()! })
             }
@@ -131,7 +130,7 @@ const [loading, setLoading] = useState(false)
             maxTime={dayjs(end)}
             views={['hours']}
             format="hh:mm"
-            ampm={false}
+            ampm={true}
             onChange={(value) =>
               setFormData({ ...formData, [FormKeys.END]: value?.toDate()! })
             }
