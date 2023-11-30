@@ -1,4 +1,5 @@
 export * from './AppointmentInfo';
+export * from './CompleteAppointment';
 export * from './ConfirmedAppointment';
 export * from './CreateAppointment';
 export { default as Dashboard } from './Dashboard';

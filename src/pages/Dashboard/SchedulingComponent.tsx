@@ -13,6 +13,7 @@ import { PendingAppointment } from './PendingAppointment';
 import { useEffect, useState } from 'react';
 import { AppointmentService } from '../../services';
 import { ConfirmedAppointment } from '.';
+import { CompletedAppointment } from './CompleteAppointment';
 
 interface Props {
   event: SchedulerHelpers;
@@ -44,6 +45,7 @@ export const SchedulingComponent: React.FC<Props> = ({
   const isSolicited = status === AppointmentStatus.SOLICITED;
   const isPending = status === AppointmentStatus.PENDING;
   const isConfirmed = status === AppointmentStatus.CONFIRMED;
+  const isCompleted = status === AppointmentStatus.COMPLETED;
 
   const getAppointment = async () => {
     try {
@@ -57,11 +59,13 @@ export const SchedulingComponent: React.FC<Props> = ({
   }, [_id]);
 
   const title = isSolicited
-    ? 'Asesoría pendiente'
+    ? 'Asesoría solicitada'
     : isPending
     ? 'Asesoría pendiente'
     : isConfirmed
     ? 'Asesoría confirmada'
+    : isCompleted
+    ? 'Asesoría completada'
     : 'Programar Asesoría';
 
   return (
@@ -100,13 +104,21 @@ export const SchedulingComponent: React.FC<Props> = ({
         />
       ) : null}
 
-      {
-        isConfirmed ? <ConfirmedAppointment    
-        event={event}
-        getSchedules={getSchedules}
-        appointment={appointment}
-        /> : null
-      }
+      {isConfirmed ? (
+        <ConfirmedAppointment
+          event={event}
+          getSchedules={getSchedules}
+          appointment={appointment}
+        />
+      ) : null}
+
+      {isCompleted ? (
+        <CompletedAppointment
+          event={event}
+          getSchedules={getSchedules}
+          appointment={appointment}
+        />
+      ) : null}
     </div>
   );
 };

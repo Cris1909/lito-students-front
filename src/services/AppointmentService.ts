@@ -26,7 +26,7 @@ class AppointmentService extends ServiceClass {
     return super.get<IAppointment[]>({
       path: `${this.path}/list-by-week`,
       params,
-      hasToken: true
+      hasToken: true,
     });
   }
 
@@ -35,7 +35,7 @@ class AppointmentService extends ServiceClass {
     return super.patch({
       path: `${this.path}/reject-appointment/${id}`,
       body,
-      hasToken: true
+      hasToken: true,
     });
   }
 
@@ -44,7 +44,7 @@ class AppointmentService extends ServiceClass {
     return super.post({
       path: `${this.path}/approve-appointment/${id}`,
       body,
-      hasToken: true
+      hasToken: true,
     });
   }
 
@@ -52,14 +52,13 @@ class AppointmentService extends ServiceClass {
     return super.get<IAppointment>({
       path: `${this.path}/appointment-by-id/${id}`,
       hasToken: true,
-      
     });
   }
 
   async confirmAppointment(id: string) {
     return super.post({
       path: `${this.path}/confirm-appointment/${id}`,
-      hasToken: true
+      hasToken: true,
     });
   }
 
@@ -68,7 +67,16 @@ class AppointmentService extends ServiceClass {
     return super.patch({
       path: `${this.path}/complete-appointment/${id}`,
       hasToken: true,
-      body
+      body,
+    });
+  }
+
+  async addReview(id: string, value: number, text: string) {
+    const body = { value, text };
+    return super.post({
+      path: `${this.path}/add-review/${id}`,
+      hasToken: true,
+      body,
     });
   }
 }
