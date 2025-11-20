@@ -6,7 +6,6 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'animate.css';
 
 import { AuthLayout, SignIn, SignUp } from './pages';
-import { Loader } from './common';
 
 import routes from './routes';
 import { useAppDispatch, useAppSelector, useToken } from './hooks';
@@ -16,6 +15,7 @@ import { startValidateToken } from './store';
 import { Dashboard } from './pages';
 import { selectAuthSlice } from './store/reducers/auth/authSlice';
 import { DefaultLayout } from './layout';
+import { BookLoader } from './components/BookLoader';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,9 +40,10 @@ function App() {
     }),
   );
 
-  return loading ? (
-    <Loader />
-  ) : (
+
+  if(loading) return <BookLoader />;
+
+  return (
     <>
       <Toaster
         position="top-right"
@@ -66,7 +67,7 @@ function App() {
                   key={index}
                   path={path}
                   element={
-                    <Suspense fallback={<Loader />}>
+                    <Suspense fallback={<BookLoader />}>
                       <Component />
                     </Suspense>
                   }
@@ -77,7 +78,7 @@ function App() {
         </Route>
       </Routes>
     </>
-  );
+  )
 }
 
 export default App;

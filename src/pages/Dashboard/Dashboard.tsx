@@ -21,7 +21,6 @@ import {
   Roles,
 } from '../../enums';
 import { SchedulingComponent } from './components';
-import { Loader } from '../../common';
 import { useAppSelector } from '../../hooks';
 import { selectAuthSlice } from '../../store/reducers/auth/authSlice';
 import dayjs from 'dayjs';

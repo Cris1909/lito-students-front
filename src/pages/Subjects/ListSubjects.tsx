@@ -10,6 +10,7 @@ import { ISubject } from '../../interfaces';
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import toast from 'react-hot-toast';
 import { Message } from 'primereact/message';
+import { BookLoader } from '../../components/BookLoader';
 
 const HandleImage = ({ img }: ISubject) => {
   return (
@@ -55,7 +56,7 @@ const ListSubjects = () => {
     error,
   } = useFetch(() => SubjectsService.listAll());
 
-  if (loading) return <Loader />;
+  if (loading) return <BookLoader />;
    
   if (error) {
     return (

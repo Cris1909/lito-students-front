@@ -10,6 +10,7 @@ import { Loader } from '../../common';
 import { IAppointment, ISubject } from '../../interfaces';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
 import { Breakpoints } from '../../enums';
+import { BookLoader } from '../../components/BookLoader';
 
 const StatisticsScreen = () => {
   const { user } = useAppSelector(selectAuthSlice);
@@ -80,7 +81,7 @@ const StatisticsScreen = () => {
     fetchData();
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <BookLoader />;
 
   return (
     <div className="p-4 flex flex-col items-center">
@@ -115,7 +116,7 @@ const StatisticsScreen = () => {
           <FaStar className="text-4xl text-primary mr-2" />
           <div>
             <p className="text-lg font-semibold">Calificación Promedio</p>
-            <p className="text-xl">{averageRating.toFixed(2)}</p>
+            <p className="text-xl">{averageRating ? averageRating.toFixed(2): 'No hay calificaciones'}</p>
           </div>
         </div>
       </div>
