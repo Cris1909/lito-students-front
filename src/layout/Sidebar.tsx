@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import Logo from '../assets/images/logo-text-white.png';
+// import Logo from '../assets/images/logo-text-white.png';
+import Logo from '../assets/images/logo.png';
 
 import {
   AiOutlineAppstore,
@@ -64,7 +65,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-
   const { user } = useAppSelector(selectAuthSlice);
 
   const location = useLocation();
@@ -114,21 +114,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   }, [sidebarExpanded]);
 
   const renderItem = (section: ISection) => {
+    const hasPermission = section.permissions.some((condition) => {
+      return user.roles.includes(condition);
+    });
 
-     const hasPermission = section.permissions.some((condition) => {
-        return user.roles.includes(condition);
-      })
-
-      if(!hasPermission) return
+    if (!hasPermission) return;
 
     return (
-    <SidebarItem
-      key={section.path}
-      sidebarExpanded={sidebarExpanded}
-      setSidebarExpanded={setSidebarExpanded}
-      section={section}
-    />
-  )};
+      <SidebarItem
+        key={section.path}
+        sidebarExpanded={sidebarExpanded}
+        setSidebarExpanded={setSidebarExpanded}
+        section={section}
+      />
+    );
+  };
 
   return (
     <aside
@@ -140,8 +140,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <div className="flex justify-center w-full">
-          <NavLink to="/">
+          <NavLink to="/" className={'flex items-center gap-2 text-white'}>
             <img src={Logo} alt="Logo" style={{ height: 32 }} />
+            Villa Learning Appointment
           </NavLink>
         </div>
 
