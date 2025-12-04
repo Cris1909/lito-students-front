@@ -25,6 +25,8 @@ enum FormKeys {
   PASSWORD = 'password',
   NAME = 'name',
   PHONE_NUMBER = 'phoneNumber',
+  HAS_SPECIAL_NEEDS = 'hasSpecialNeeds',
+  NEEDS_EMOTIONAL_SUPPORT = 'needsEmotionalSupport',
 }
 
 interface IFormInput {
@@ -32,6 +34,8 @@ interface IFormInput {
   [FormKeys.PASSWORD]: string;
   [FormKeys.NAME]: string;
   [FormKeys.PHONE_NUMBER]: string;
+  [FormKeys.HAS_SPECIAL_NEEDS]: boolean;
+  [FormKeys.NEEDS_EMOTIONAL_SUPPORT]: boolean;
 }
 
 const emailValidations: RegisterOptions<FieldValues> = {
@@ -82,6 +86,8 @@ const phoneNumberValidations: RegisterOptions<FieldValues> = {
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [hasSpecialNeeds, setHasSpecialNeeds] = useState<boolean>(false);
+  const [needsEmotionalSupport, setNeedsEmotionalSupport] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -167,6 +173,17 @@ export const SignUp = () => {
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    // Si marca alguna opción de necesidades especiales, redirigir a página informativa
+    if (hasSpecialNeeds || needsEmotionalSupport) {
+      return navigate(ROUTES.ACCESSIBILITY_INFO, {
+        state: {
+          hasSpecialNeeds,
+          needsEmotionalSupport,
+          userData: data
+        }
+      });
+    }
+
     toast.remove('error');
     toast.loading('Cargando...', { id: 'loading' });
     const { success, error } = await dispatch(startRegister(data));
@@ -239,6 +256,54 @@ export const SignUp = () => {
           error={errors[FormKeys.PASSWORD]}
           
         />
+
+        <div className="mb-6 mt-8 space-y-4 border-t pt-6">
+          <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">
+            Para brindarte una mejor experiencia 💙
+          </h3>
+          
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex-1 pr-4">
+              <label htmlFor="hasSpecialNeeds" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                ¿Requieres apoyo educativo especializado?
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Por ejemplo: dislexia, TDAH, autismo, discapacidad visual o auditiva
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="hasSpecialNeeds"
+                className="sr-only peer"
+                checked={hasSpecialNeeds}
+                onChange={(e) => setHasSpecialNeeds(e.target.checked)}
+              />
+              <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex-1 pr-4">
+              <label htmlFor="needsEmotionalSupport" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                ¿Te gustaría recibir apoyo emocional?
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Estamos aquí para acompañarte en momentos difíciles
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="needsEmotionalSupport"
+                className="sr-only peer"
+                checked={needsEmotionalSupport}
+                onChange={(e) => setNeedsEmotionalSupport(e.target.checked)}
+              />
+              <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+            </label>
+          </div>
+        </div>
 
         <div className="mb-5">
           <GlobalButton disabled={loading} type="submit" text="Crear cuenta" />

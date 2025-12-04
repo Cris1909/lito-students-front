@@ -3,6 +3,7 @@ import { Sections } from '.';
 export enum ROUTES {
   SIGNIN = `/${Sections.AUTH}/signin`,
   SIGNUP = `/${Sections.AUTH}/signup`,
+  ACCESSIBILITY_INFO = `/${Sections.AUTH}/accessibility-info`,
   DASHBOARD = `/${Sections.DASHBOARD}`,
   CREATE_SUBJECT = `/${Sections.SUBJECTS}/create`,
   LIST_SUBJECTS = `/${Sections.SUBJECTS}/list`,

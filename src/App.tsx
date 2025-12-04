@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'animate.css';
 
-import { AuthLayout, SignIn, SignUp } from './pages';
+import { AuthLayout, SignIn, SignUp, AccessibilityInfo } from './pages';
 
 import routes from './routes';
 import { useAppDispatch, useAppSelector, useToken } from './hooks';
@@ -55,6 +55,7 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path={useToken() ? '/' : ROUTES.SIGNIN} element={<SignIn />} />
           <Route path={useToken() ? '/' : ROUTES.SIGNUP} element={<SignUp />} />
+          <Route path={useToken() ? '/' : ROUTES.ACCESSIBILITY_INFO} element={<AccessibilityInfo />} />
         </Route>
         <Route element={<ProtectedRoutes />}>
           <Route element={<DefaultLayout />}>

@@ -103,7 +103,7 @@ export const SignIn = () => {
   return (
     <div className="">
       <h2 className="mb-9 text-2xl font-bold text-primary-600 dark:text-white sm:text-title-xl2">
-        Inicia sesión con tu LitoCuenta
+        Inicia sesión con tu Cuenta
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>

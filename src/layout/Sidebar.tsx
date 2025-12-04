@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-// import Logo from '../assets/images/logo-text-white.png';
-import Logo from '../assets/images/logo.png';
+import Logo from '../assets/images/logo-text-white.png';
 
 import {
   AiOutlineAppstore,
@@ -138,11 +137,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-6">
         <div className="flex justify-center w-full">
           <NavLink to="/" className={'flex items-center gap-2 text-white'}>
-            <img src={Logo} alt="Logo" style={{ height: 32 }} />
-            Villa Learning Appointment
+            <img src={Logo} alt="Logo"  />
           </NavLink>
         </div>
 
