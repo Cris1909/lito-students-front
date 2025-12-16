@@ -19,7 +19,6 @@ import { Errors } from '../../enums';
 import { ISubject } from '../../interfaces';
 
 import DEFAULT_IMAGE from '../../assets/images/default-image.png';
-import dayjs from 'dayjs';
 
 enum FormKeys {
   NAME = 'name',

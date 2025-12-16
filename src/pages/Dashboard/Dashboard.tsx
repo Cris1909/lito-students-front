@@ -31,17 +31,16 @@ const Dashboard = () => {
   const { roles } = user;
 
   const isStudent = roles.includes(Roles.STUDENT);
-  const isTeacher = roles.includes(Roles.TEACHER);
 
-  const [selectedDay, setSelectedDay] = useState(formatDateInLocalTimezone());
+  const [selectedDay] = useState(formatDateInLocalTimezone());
 
-  const [availableSchedules, setAvailableSchedules] = useState<
+  const [, setAvailableSchedules] = useState<
     IAvailableSchedule[]
   >([]);
 
-  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+  const [, setAppointments] = useState<IAppointment[]>([]);
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [, setLoading] = useState<boolean>(true);
 
   const [data, setData] = useState<any>([]);
 
@@ -84,7 +83,7 @@ const Dashboard = () => {
       });
 
       const newData: any = availableSchedules.flatMap(
-        (item: IAvailableSchedule, i: number) => {
+        (item: IAvailableSchedule) => {
           const groupedHours: number[][] = dayjs().isSame(item.date, 'day')
             ? groupConsecutiveHoursSameDay(item.hours)
             : groupConsecutiveHours(item.hours);

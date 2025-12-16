@@ -1,7 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { FaHeart, FaBrain, FaHandsHelping, FaInfoCircle } from 'react-icons/fa';
-import { GlobalButton } from '../../../components';
-import { ROUTES } from '../../../enums';
 
 interface LocationState {
   hasSpecialNeeds: boolean;
@@ -11,13 +9,7 @@ interface LocationState {
 
 export const AccessibilityInfo = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const state = location.state as LocationState;
-
-  const handleContinue = () => {
-    // Aquí podrías guardar esta información en el registro si lo deseas
-    navigate(ROUTES.SIGNIN);
-  };
 
   const { hasSpecialNeeds, needsEmotionalSupport } = state || {};
 
